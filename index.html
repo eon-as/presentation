@@ -117,6 +117,10 @@
       </div>
     </header>
 
+    <div class="scroll-progress" role="progressbar" aria-label="Scroll progress">
+      <div class="scroll-progress-bar"></div>
+    </div>
+
     <nav class="dots" aria-label="Slides">
       <a href="#slide-1" aria-current="true" aria-label="Slide 1"></a>
       <a href="#slide-2" aria-current="false" aria-label="Slide 2"></a>
@@ -289,12 +293,6 @@
               <div class="project-media" aria-label="Bilde">
                 <img data-inline="norsk_luftambulanse" alt="Norsk Luftambulanse prosjektbilde" loading="lazy"  />
               </div>
-              <div class="chips" style="margin-top:10px">
-                <span class="chip"><span class="mini" aria-hidden="true"></span>React + TypeScript</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Vite + Tailwind</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Rust</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Modbus</span>
-              </div>
               <p>
                 Prosjektet handler om å lage en ny helikoptertralle for å transportere ambulansehelikopteret til og fra hangar. 
                 Trallen styres via fjernkontroll fra helikopteret og har innebygd automasjon som opp/ned ramping, sikkerhetssoner, 
@@ -322,12 +320,6 @@
               <div class="project-media" style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
                 <img data-inline="aas_betong_1" alt="Ås Betong prosjektbilde 1" loading="lazy" style="aspect-ratio:16/10; object-fit:cover; border-radius:12px" />
                 <img data-inline="aas_betong_2" alt="Ås Betong prosjektbilde 2" loading="lazy" style="aspect-ratio:16/10; object-fit:cover; border-radius:12px" />
-              </div>
-              <div class="chips" style="margin-top:10px">
-                <span class="chip"><span class="mini" aria-hidden="true"></span>React + TypeScript</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Rust</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Modbus</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>SSE / polling</span>
               </div>
               <p>
                 Nytt SCADA-system for produksjonsmiljø hvor vi gjenbrukte eksisterende PLC. IPC med Rust Backend håndterer 
@@ -357,7 +349,7 @@
               <div class="card">
                 <h4>E-post</h4>
                 <div class="contact-row" aria-label="E-postvalg" style="margin-top:12px">
-                  <button class="btn primary" type="button" data-copy="tommy.nordmarken@eon-as.no">
+                  <button class="btn" type="button" data-copy="tommy.nordmarken@eon-as.no">
                     Kopier Tommy
                     <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                       <path
@@ -415,7 +407,7 @@
                 <h4>Telefon</h4>
                 <p class="muted small" style="margin:10px 0 0">Tommy Nordmarken: +47 400 48 737</p>
                 <div class="contact-row" aria-label="Telefonvalg" style="margin-top:12px">
-                  <a class="btn primary" href="tel:+4740048737">
+                  <a class="btn" href="tel:+4740048737">
                     Ring Tommy
                     <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                       <path
@@ -710,12 +702,9 @@
             <div class="card">
               <h4>Teknologi</h4>
               <div class="chips" style="margin-top:12px">
-                <span class="chip"><span class="mini" aria-hidden="true"></span>React / TypeScript</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Vite</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Tailwind CSS</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Rust</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Axum + Tokio</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>ModbusTCP</span>
+                <span class="chip" data-tech="react-typescript" role="button" tabindex="0"><span class="mini" aria-hidden="true"></span>React</span>
+                <span class="chip" data-tech="rust" role="button" tabindex="0"><span class="mini" aria-hidden="true"></span>Rust</span>
+                <span class="chip" data-tech="modbus" role="button" tabindex="0"><span class="mini" aria-hidden="true"></span>Modbus</span>
               </div>
               <p class="muted small" style="margin:12px 0 0">
                 Rust-backend håndterer all systemlogikk, kommunikasjon med PLC via ModbusTCP, og eksponerer API for React-frontend. React-applikasjonen gir moderne brukergrensesnitt for overvåking og konfigurering, mens PLC-en styrer I/O-operasjoner og sikkerhetskritisk automasjon. Systemet er designet for pålitelig drift i krevende industrielle miljøer.
@@ -773,8 +762,9 @@
               </p>
               <p class="muted small" style="margin:10px 0 0">
                 ModbusTCP ble gjenbrukt som kommunikasjon, og over <strong>700 registre ble mappet opp</strong>. 
-                Håndtering av båndbredde og prioritering ble gjort på Rust-siden, og SSE (Server-Sent Events) ble brukt 
-                for å videreføre data til React frontend.
+                Håndtering av båndbredde og prioritering ble gjort på Rust-siden. SSE (Server-Sent Events) ble valgt 
+                for å videreføre data til React frontend, noe som var særlig nyttig med tanke på den store datamengden 
+                som skulle sendes kontinuerlig.
               </p>
               <div class="project-media" style="margin-top:14px; display:grid; grid-template-columns:1fr 1fr; gap:8px">
                 <img data-inline="aas_betong_1" alt="Ås Betong prosjektbilde 1" loading="lazy" style="aspect-ratio:16/10; object-fit:cover; border-radius:12px" />
@@ -785,14 +775,10 @@
             <div class="card">
               <h4>Teknologi</h4>
               <div class="chips" style="margin-top:12px">
-                <span class="chip"><span class="mini" aria-hidden="true"></span>React 19 / TypeScript</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Vite + Tailwind</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Radix UI</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Framer Motion</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Rust</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>Axum + Tokio</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>tokio-modbus</span>
-                <span class="chip"><span class="mini" aria-hidden="true"></span>SSE / polling</span>
+                <span class="chip" data-tech="react-typescript" role="button" tabindex="0"><span class="mini" aria-hidden="true"></span>React</span>
+                <span class="chip" data-tech="rust" role="button" tabindex="0"><span class="mini" aria-hidden="true"></span>Rust</span>
+                <span class="chip" data-tech="modbus" role="button" tabindex="0"><span class="mini" aria-hidden="true"></span>Modbus</span>
+                <span class="chip" data-tech="sse" role="button" tabindex="0"><span class="mini" aria-hidden="true"></span>SSE</span>
               </div>
               <p class="muted small" style="margin:12px 0 0">
                 Backend eksponerer API for Modbus, polling, system og UI-mappinger. Frontend er bygget som en moderne,
@@ -826,6 +812,171 @@
       </div>
     </section>
 
+    <!-- Modal: React -->
+    <section class="modal" id="modal-react-typescript" role="dialog" aria-modal="true" aria-labelledby="modal-react-typescript-title">
+      <div class="modal-dialog">
+        <div class="modal-head">
+          <strong id="modal-react-typescript-title">React</strong>
+          <button class="icon-btn" type="button" data-close-modal aria-label="Lukk">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <h4>Hva er React?</h4>
+            <p class="muted small" style="margin:10px 0 0">
+              React er et populært JavaScript-bibliotek for å bygge brukergrensesnitt, spesielt for web-applikasjoner. 
+              Det bruker en komponentbasert arkitektur hvor UI er bygget opp av gjenbrukbare komponenter. React 19 er 
+              den nyeste versjonen med forbedret ytelse og nye features som gir bedre utvikleropplevelse.
+            </p>
+            <p class="muted small" style="margin:10px 0 0">
+              <strong>Hvorfor vi bruker det:</strong> React gir oss en effektiv måte å bygge moderne brukergrensesnitt på. 
+              Komponentbasert arkitektur gjør det enkelt å bygge gjenbrukbare UI-komponenter, og virtual DOM gir god ytelse. 
+              Dette er spesielt viktig i industrielle systemer hvor vi trenger responsive dashboards og kontrollflater 
+              som kan håndtere real-time data fra produksjonsmiljøer.
+            </p>
+            <p class="muted small" style="margin:10px 0 0">
+              <strong>I våre prosjekter:</strong> Vi bruker React sammen med <strong>TypeScript</strong> for type-sikkerhet 
+              og bedre utvikleropplevelse. React gir oss fleksibilitet til å bygge moderne, responsive brukergrensesnitt 
+              som kan håndtere komplekse industrielle dashboards og kontrollflater.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal: Vite + Tailwind -->
+    <section class="modal" id="modal-vite-tailwind" role="dialog" aria-modal="true" aria-labelledby="modal-vite-tailwind-title">
+      <div class="modal-dialog">
+        <div class="modal-head">
+          <strong id="modal-vite-tailwind-title">Vite + Tailwind CSS</strong>
+          <button class="icon-btn" type="button" data-close-modal aria-label="Lukk">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <h4>Hva er Vite + Tailwind?</h4>
+            <p class="muted small" style="margin:10px 0 0">
+              Vite er en moderne build-verktøy som gir ekstremt rask utviklingsopplevelse med instant server start 
+              og rask hot module replacement (HMR). Tailwind CSS er et utility-first CSS-rammeverk som lar oss bygge 
+              moderne designs raskt uten å skrive mye custom CSS.
+            </p>
+            <p class="muted small" style="margin:10px 0 0">
+              <strong>Hvorfor vi bruker det:</strong> Vite gir oss raskere utvikling og bygging sammenlignet med tradisjonelle 
+              build-verktøy. Tailwind CSS lar oss bygge konsistente, responsive designs raskt uten å hoppe mellom filer. 
+              Dette reduserer utviklingstid og gjør det enklere å vedlikeholde styling.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal: Rust -->
+    <section class="modal" id="modal-rust" role="dialog" aria-modal="true" aria-labelledby="modal-rust-title">
+      <div class="modal-dialog">
+        <div class="modal-head">
+          <strong id="modal-rust-title">Rust</strong>
+          <button class="icon-btn" type="button" data-close-modal aria-label="Lukk">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <h4>Hva er Rust?</h4>
+            <p class="muted small" style="margin:10px 0 0">
+              Rust er et systemprogrammeringsspråk som fokuserer på ytelse, minnesikkerhet og samtidighet. 
+              Det kombinerer lavnivåkontroll (som C/C++) med høynivå abstraksjoner og garanterer minnesikkerhet 
+              uten garbage collection.
+            </p>
+            <p class="muted small" style="margin:10px 0 0">
+              <strong>Hvorfor vi bruker det:</strong> Rust er ideelt for industrielle systemer hvor pålitelighet, 
+              ytelse og minnesikkerhet er kritiske. Det er perfekt for backend-tjenester som håndterer industriell 
+              kommunikasjon, I/O-operasjoner og systemintegrasjoner. Rust gir oss høy ytelse uten kompromisser 
+              når det gjelder sikkerhet og vedlikeholdbarhet.
+            </p>
+            <p class="muted small" style="margin:10px 0 0">
+              <strong>I våre prosjekter:</strong> Vi bruker Rust for backend-tjenester som håndterer industriell 
+              kommunikasjon, I/O-operasjoner og systemintegrasjoner. Rust gir oss høy ytelse og pålitelighet uten 
+              kompromisser når det gjelder sikkerhet og vedlikeholdbarhet. Vi bruker også Rust-biblioteker som 
+              <strong>Axum</strong> og <strong>Tokio</strong> for asynkron håndtering og <strong>tokio-modbus</strong> 
+              for type-sikker Modbus-kommunikasjon.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal: Modbus -->
+    <section class="modal" id="modal-modbus" role="dialog" aria-modal="true" aria-labelledby="modal-modbus-title">
+      <div class="modal-dialog">
+        <div class="modal-head">
+          <strong id="modal-modbus-title">Modbus</strong>
+          <button class="icon-btn" type="button" data-close-modal aria-label="Lukk">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <h4>Hva er Modbus?</h4>
+            <p class="muted small" style="margin:10px 0 0">
+              Modbus er en kommunikasjonsprotokoll som ble utviklet for bruk med programmerbare logikkontrollere (PLCs). 
+              Det er en av de mest brukte protokollene i industriell automasjon og lar systemer kommunisere med 
+              industrielt utstyr som sensorer, aktuatorer og kontrollere.
+            </p>
+            <p class="muted small" style="margin:10px 0 0">
+              <strong>Hvorfor vi bruker det:</strong> Modbus er en standard i industrien og støttes av de fleste PLC-er 
+              og industrielt utstyr. Ved å bruke Modbus kan vi integrere nye systemer med eksisterende infrastruktur 
+              uten å erstatte hele anlegget. Dette gjør modernisering mer kostnadseffektiv og reduserer risiko.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal: SSE -->
+    <section class="modal" id="modal-sse" role="dialog" aria-modal="true" aria-labelledby="modal-sse-title">
+      <div class="modal-dialog">
+        <div class="modal-head">
+          <strong id="modal-sse-title">SSE (Server-Sent Events)</strong>
+          <button class="icon-btn" type="button" data-close-modal aria-label="Lukk">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <h4>Hva er SSE?</h4>
+            <p class="muted small" style="margin:10px 0 0">
+              Server-Sent Events (SSE) er en teknologi som lar en server sende data til en klient automatisk over 
+              en HTTP-tilkobling. I motsetning til polling (hvor klienten må spørre serveren kontinuerlig), 
+              opprettholder SSE en åpen tilkobling hvor serveren kan sende data når det er tilgjengelig.
+            </p>
+            <p class="muted small" style="margin:10px 0 0">
+              <strong>Hvorfor vi bruker det:</strong> SSE er mer effektivt enn tradisjonell polling fordi det 
+              reduserer nettverkstrafikk og latens. Dette er spesielt viktig i industrielle systemer hvor 
+              real-time data er kritisk. SSE gir oss en balanse mellom real-time oppdateringer og båndbreddebruk.
+            </p>
+            <p class="muted small" style="margin:10px 0 0">
+              <strong>I våre prosjekter:</strong> I Ås betong-prosjektet var SSE særlig nyttig med tanke på den store 
+              datamengden som skulle sendes. Med over 700 mappede registre fra PLC-en, ville tradisjonell polling 
+              ha generert mye unødvendig nettverkstrafikk. SSE lar oss sende data effektivt når det er endringer, 
+              noe som reduserer båndbreddebruk betydelig sammenlignet med kontinuerlig polling.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <script>
       (() => {
         const root = document.documentElement;
@@ -840,6 +991,11 @@
         const modalTommy = document.getElementById("modal-tommy");
         const modalHelipad = document.getElementById("modal-helipad");
         const modalAas = document.getElementById("modal-aas");
+        const modalReactTypeScript = document.getElementById("modal-react-typescript");
+        const modalViteTailwind = document.getElementById("modal-vite-tailwind");
+        const modalRust = document.getElementById("modal-rust");
+        const modalModbus = document.getElementById("modal-modbus");
+        const modalSse = document.getElementById("modal-sse");
 
         const prefersReduced =
           window.matchMedia &&
@@ -1037,6 +1193,16 @@
           }
         }
 
+        // Scroll progress bar
+        const progressBar = document.querySelector(".scroll-progress-bar");
+        function updateScrollProgress() {
+          if (!progressBar || !scrollEl) return;
+          const scrollTop = scrollEl.scrollTop;
+          const scrollHeight = scrollEl.scrollHeight - scrollEl.clientHeight;
+          const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+          progressBar.style.width = `${progress}%`;
+        }
+
         let rafId = 0;
         scrollEl.addEventListener(
           "scroll",
@@ -1045,10 +1211,14 @@
             rafId = requestAnimationFrame(() => {
               setCurrentDot(getClosestSlideIndex());
               handleHeaderScroll();
+              updateScrollProgress();
             });
           },
           { passive: true }
         );
+        
+        // Initial progress update
+        updateScrollProgress();
 
         // Keyboard navigation (Up/Down)
         function goToSlide(i) {
@@ -1113,6 +1283,24 @@
             if (which === "aas") openModal(modalAas);
           });
         });
+        
+        // Technology chip modals
+        document.querySelectorAll("[data-tech]").forEach((chip) => {
+          chip.addEventListener("click", () => {
+            const tech = chip.getAttribute("data-tech");
+            if (tech === "react-typescript") openModal(modalReactTypeScript);
+            if (tech === "vite-tailwind") openModal(modalViteTailwind);
+            if (tech === "rust") openModal(modalRust);
+            if (tech === "modbus") openModal(modalModbus);
+            if (tech === "sse") openModal(modalSse);
+          });
+          chip.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              chip.click();
+            }
+          });
+        });
         document.querySelectorAll("[data-close-modal]").forEach((btn) => {
           btn.addEventListener("click", () => closeModal(btn.closest(".modal")));
         });
@@ -1134,6 +1322,26 @@
             e.preventDefault();
             closeModal(modalAas);
           }
+          if (modalReactTypeScript?.classList.contains("open")) {
+            e.preventDefault();
+            closeModal(modalReactTypeScript);
+          }
+          if (modalViteTailwind?.classList.contains("open")) {
+            e.preventDefault();
+            closeModal(modalViteTailwind);
+          }
+          if (modalRust?.classList.contains("open")) {
+            e.preventDefault();
+            closeModal(modalRust);
+          }
+          if (modalModbus?.classList.contains("open")) {
+            e.preventDefault();
+            closeModal(modalModbus);
+          }
+          if (modalSse?.classList.contains("open")) {
+            e.preventDefault();
+            closeModal(modalSse);
+          }
         });
         modalErik?.addEventListener("click", (e) => {
           if (e.target === modalErik) closeModal(modalErik);
@@ -1146,6 +1354,21 @@
         });
         modalAas?.addEventListener("click", (e) => {
           if (e.target === modalAas) closeModal(modalAas);
+        });
+        modalReactTypeScript?.addEventListener("click", (e) => {
+          if (e.target === modalReactTypeScript) closeModal(modalReactTypeScript);
+        });
+        modalViteTailwind?.addEventListener("click", (e) => {
+          if (e.target === modalViteTailwind) closeModal(modalViteTailwind);
+        });
+        modalRust?.addEventListener("click", (e) => {
+          if (e.target === modalRust) closeModal(modalRust);
+        });
+        modalModbus?.addEventListener("click", (e) => {
+          if (e.target === modalModbus) closeModal(modalModbus);
+        });
+        modalSse?.addEventListener("click", (e) => {
+          if (e.target === modalSse) closeModal(modalSse);
         });
 
         // Copy to clipboard
