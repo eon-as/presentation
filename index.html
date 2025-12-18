@@ -87,7 +87,7 @@
 
       html[data-theme="dark"] {
         color-scheme: dark;
-        /* Explicitly set dark theme variables to override @media prefers-color-scheme */
+        /* Override @media prefers-color-scheme when dark theme is explicitly selected */
         --bg: #070a12;
         --bg2: #0b1020;
         --panel: rgba(255, 255, 255, 0.06);
@@ -100,6 +100,23 @@
         --shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.18);
         --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.16);
         --shadow-sm: 0 8px 18px rgba(0, 0, 0, 0.14);
+      }
+      /* Ensure dark theme overrides even when system prefers light */
+      @media (prefers-color-scheme: light) {
+        html[data-theme="dark"] {
+          --bg: #070a12;
+          --bg2: #0b1020;
+          --panel: rgba(255, 255, 255, 0.06);
+          --panel2: rgba(255, 255, 255, 0.08);
+          --text: rgba(255, 255, 255, 0.92);
+          --muted: rgba(255, 255, 255, 0.72);
+          --muted2: rgba(255, 255, 255, 0.55);
+          --line: rgba(255, 255, 255, 0.10);
+          --line2: rgba(255, 255, 255, 0.16);
+          --shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.18);
+          --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.16);
+          --shadow-sm: 0 8px 18px rgba(0, 0, 0, 0.14);
+        }
       }
       html[data-theme="light"] {
         color-scheme: light;
