@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="no" data-theme="system">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Eon AS — Bedrift og Ansatte</title>
+    <meta name="description" content="Presentasjon av Eon AS, ansatte og prosjekter — A3 format" />
+    
+    <style>
+      :root {
+        /* Typography */
+        --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+
+        /* Layout */
+        --radius-lg: 20px;
+        --radius-md: 14px;
+        --radius-sm: 10px;
+
+        /* Color tokens (default = dark, overridden by theme) */
+        --bg: #070a12;
+        --bg2: #0b1020;
+        --panel: rgba(255, 255, 255, 0.06);
+        --panel2: rgba(255, 255, 255, 0.08);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --muted2: rgba(255, 255, 255, 0.55);
+        --line: rgba(255, 255, 255, 0.10);
+        --line2: rgba(255, 255, 255, 0.16);
+        --brand: #8df0ff;
+        --brand2: #a78bfa;
+      }
+
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f6f7fb;
+          --bg2: #eef1ff;
+          --panel: rgba(255, 255, 255, 0.70);
+          --panel2: rgba(255, 255, 255, 0.88);
+          --text: rgba(10, 15, 30, 0.92);
+          --muted: rgba(10, 15, 30, 0.72);
+          --muted2: rgba(10, 15, 30, 0.56);
+          --line: rgba(10, 15, 30, 0.10);
+          --line2: rgba(10, 15, 30, 0.14);
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: var(--font-sans);
+        color: var(--text);
+        background: var(--bg);
+        line-height: 1.6;
+      }
+
+      /* A3 Landscape Container */
+      .a3-container {
+        width: 420mm;
+        height: 297mm;
+        margin: 0 auto;
+        background: var(--bg2);
+        padding: 15mm;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 12mm;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Header */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 10mm;
+        border-bottom: 2px solid var(--line);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand img.logo {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .brand p {
+        margin: 4px 0 0;
+        font-size: 16px;
+        color: var(--muted);
+      }
+
+      /* Main Content Grid */
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15mm;
+        height: 100%;
+      }
+
+      /* Left Column: Bedrift og Ansatte */
+      .left-column {
+        display: flex;
+        flex-direction: column;
+        gap: 12mm;
+      }
+
+      /* Company Section */
+      .company-section {
+        background: var(--panel);
+        padding: 10mm;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--line);
+      }
+
+      .company-section h2 {
+        margin: 0 0 8px;
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      .company-section p {
+        margin: 0;
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      /* Employees Section */
+      .employees-section h3 {
+        margin: 0 0 10mm;
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .employee {
+        background: var(--panel);
+        padding: 8mm;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--line);
+        margin-bottom: 8mm;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .employee:last-child {
+        margin-bottom: 0;
+      }
+
+      .employee-photo,
+      .employee-avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--line2);
+        flex-shrink: 0;
+      }
+
+      .employee-avatar {
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--brand), var(--brand2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 24px;
+        color: var(--text);
+      }
+
+      .employee-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .employee-info h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--muted);
+        padding: 5px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .chip .mini {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--brand), var(--brand2));
+      }
+
+      .contact-info {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      /* Right Column: Prosjekter */
+      .right-column {
+        display: flex;
+        flex-direction: column;
+        gap: 12mm;
+      }
+
+      .projects-section h3 {
+        margin: 0 0 10mm;
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .project {
+        background: var(--panel);
+        padding: 8mm;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--line);
+        margin-bottom: 8mm;
+      }
+
+      .project:last-child {
+        margin-bottom: 0;
+      }
+
+      .project h4 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .project-media {
+        margin-top: 8px;
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        max-height: 80mm;
+        aspect-ratio: 16 / 10;
+      }
+
+      .project-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .project p {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      /* Print Styles */
+      @media print {
+        body {
+          padding: 0;
+          background: white;
+        }
+
+        .a3-container {
+          width: 420mm;
+          height: 297mm;
+          margin: 0;
+          padding: 15mm;
+          box-shadow: none;
+          background: white;
+        }
+
+        @page {
+          size: A3 landscape;
+          margin: 0;
+        }
+
+        * {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+      }
+
+      /* Screen styles for viewing */
+      @media screen {
+        body {
+          background: var(--bg);
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        }
+
+        .a3-container {
+          transform: scale(0.7);
+          transform-origin: center;
+        }
+
+        @media (max-width: 1400px) {
+          .a3-container {
+            transform: scale(0.6);
+          }
+        }
+
+        @media (max-width: 1000px) {
+          .a3-container {
+            transform: scale(0.5);
+          }
+        }
+
+        @media (max-width: 800px) {
+          .a3-container {
+            transform: scale(0.4);
+          }
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="a3-container">
+      <!-- Header -->
+      <header class="header">
+        <div class="brand">
+          <img class="logo" data-inline="logo" alt="Eon AS Logo" />
+          <div>
+            <h1>Eon AS</h1>
+            <p>To personer. Store leveranser.</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Left Column: Bedrift og Ansatte -->
+        <div class="left-column">
+          <!-- Company Section -->
+          <section class="company-section">
+            <h2>Om oss</h2>
+            <p style="margin-bottom: 8px;">
+              Eon AS bistår industribedrifter og prosjektledere som trenger hjelp til å få tekniske prosjekter i mål.
+              Vi leverer robuste, moderne og tilpassede løsninger – og tar ansvar der andre leverandører stopper.
+            </p>
+            <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+              <div>
+                <strong style="font-size: 13px;">Skreddersøm – ikke hyllevare</strong>
+                <p style="margin: 4px 0 0; font-size: 12px; line-height: 1.5;">
+                  Vi bygger løsninger tilpasset eksisterende anlegg, arbeidsprosesser og krav til driftssikkerhet. Dette gir systemer som faktisk brukes – og som varer.
+                </p>
+              </div>
+              <div>
+                <strong style="font-size: 13px;">Broen mellom OT og IT</strong>
+                <p style="margin: 4px 0 0; font-size: 12px; line-height: 1.5;">
+                  Solid forståelse for både industriell drift og moderne programvareutvikling. Vi kobler maskiner og sensorer mot moderne systemer, fra fabrikkgulv til skybaserte løsninger.
+                </p>
+              </div>
+              <div>
+                <strong style="font-size: 13px;">Moderne teknologi – på riktig måte</strong>
+                <p style="margin: 4px 0 0; font-size: 12px; line-height: 1.5;">
+                  Rust, React, Linux-baserte systemer og industriell kommunikasjon. Teknologi er et virkemiddel – ikke et mål i seg selv.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Employees Section -->
+          <section class="employees-section">
+            <h3>Vårt team</h3>
+            
+            <article class="employee">
+              <img class="employee-photo" data-inline="erik_profile" alt="Erik Nerhus" />
+              <div class="employee-info">
+                <h4>Erik Nerhus</h4>
+                <p style="margin: 6px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted);">
+                  MSc-utdannet ingeniør med bred erfaring innen maskindesign, robotikk, maskinkontroll og elektriske systemer. Jobber i skjæringspunktet mellom mekanikk, elektro og programvare.
+                </p>
+              </div>
+            </article>
+
+            <article class="employee">
+              <div class="employee-avatar">TN</div>
+              <div class="employee-info">
+                <h4>Tommy Nordmarken</h4>
+                <p style="margin: 6px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted);">
+                  Erfaren og løsningsorientert ingeniør innen elektro, automasjon og kontrollsystemer. Kombinerer teknisk dybde med prosjektledelse/ITB, og er vant til å lede team og leveranser fra idé til ferdig idriftsettelse i krevende miljøer.
+                </p>
+              </div>
+            </article>
+          </section>
+        </div>
+
+        <!-- Right Column: Prosjekter -->
+        <div class="right-column">
+          <section class="projects-section">
+            <h3>Prosjekter</h3>
+
+            <article class="project">
+              <h4>Norsk Luftambulanse — Helikoptertrallen</h4>
+              <div class="project-media">
+                <img data-inline="norsk_luftambulanse" alt="Norsk Luftambulanse prosjektbilde" />
+              </div>
+              <div class="chips" style="margin-top: 8px;">
+                <span class="chip"><span class="mini"></span>React + TypeScript</span>
+                <span class="chip"><span class="mini"></span>Vite + Tailwind</span>
+                <span class="chip"><span class="mini"></span>Rust (Axum/Tokio)</span>
+                <span class="chip"><span class="mini"></span>ModbusTCP</span>
+              </div>
+              <p>
+                Prosjektet handler om å lage en ny helikoptertralle for å transportere ambulansehelikopteret til og fra hangar. 
+                Trallen styres via fjernkontroll fra helikopteret og har innebygd automasjon som opp/ned ramping, sikkerhetssoner, 
+                og en HMI for systemovervåking og konfigurering. En effektiv React-applikasjon håndterer logikken, mens en PLC 
+                håndterer I/O.
+              </p>
+            </article>
+
+            <article class="project">
+              <h4>Aas Betong — SCADA</h4>
+              <div class="project-media" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px;">
+                <img data-inline="aas_betong_1" alt="Ås Betong prosjektbilde 1" style="aspect-ratio: 16/10; object-fit: cover; border-radius: 8px;" />
+                <img data-inline="aas_betong_2" alt="Ås Betong prosjektbilde 2" style="aspect-ratio: 16/10; object-fit: cover; border-radius: 8px;" />
+              </div>
+              <div class="chips" style="margin-top: 8px;">
+                <span class="chip"><span class="mini"></span>React + TypeScript</span>
+                <span class="chip"><span class="mini"></span>Rust (Axum/Tokio)</span>
+                <span class="chip"><span class="mini"></span>Modbus</span>
+                <span class="chip"><span class="mini"></span>SSE / polling</span>
+              </div>
+              <p>
+                Nytt SCADA-system for produksjonsmiljø hvor vi gjenbrukte eksisterende PLC. IPC med Rust Backend håndterer 
+                logikk og industriell kommunikasjon, mens React frontend gir moderne brukeropplevelse. ModbusTCP ble gjenbrukt 
+                med over 700 mappede registre. Båndbreddehåndtering og prioritering skjer på Rust-siden, med SSE for 
+                videreføring til React.
+              </p>
+            </article>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Base64 bilder - blir satt dynamisk
+            const INLINE_IMAGES = {
+        logo: 'bilder/logo.jpeg',
+        erik_profile: 'bilder/Profilbilde_Erik.png',
+        helipad_new: 'bilder/IMG_0463.jpeg',
+        helihangard: 'bilder/helihangard-1.jpeg',
+        norsk_luftambulanse: 'bilder/NorskLuftambulanse.png',
+        aas_betong_1: 'bilder/Aas Betong 1.png',
+        aas_betong_2: 'bilder/Aas Betong.png',
+      };
+
+      // Apply inline images when DOM is ready
+      function applyImages() {
+        document.querySelectorAll("img[data-inline]").forEach((img) => {
+          const key = img.getAttribute("data-inline");
+          const uri = key && INLINE_IMAGES[key] ? INLINE_IMAGES[key] : null;
+          if (uri) {
+            img.src = uri;
+            img.onerror = function() {
+              console.warn("Failed to load image:", key);
+            };
+          }
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyImages);
+      } else {
+        applyImages();
+      }
+    </script>
+  </body>
+</html>
