@@ -7,6 +7,10 @@
 Helipad/
 Aas-betong/
 
+# Source assets (already embedded as base64 in index.html)
+bilder/
+cv/
+
 # OS-specific files
 .DS_Store
 .DS_Store?
