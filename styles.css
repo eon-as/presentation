@@ -331,7 +331,8 @@ button:focus-visible {
 /* Flytt "Hvem vi er" og "Kontakt" høyere opp */
 #slide-2,
 #slide-4 {
-  padding-top: 0px;
+  padding-top: 10px;
+  padding-bottom: 20px;
   align-items: start;
 }
 
@@ -892,6 +893,68 @@ html[data-theme="light"] .modal-head {
   gap: 14px;
   align-items: start;
 }
+
+.person-scrollable {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 300px);
+  min-height: 450px;
+}
+
+.person-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.person-header h4 {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.person-header .role {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.scrollable-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  margin-right: -8px;
+  padding-bottom: 8px;
+}
+
+.scrollable-content .card {
+  padding: 16px;
+}
+
+.scrollable-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
 .avatar {
   width: 56px;
   height: 56px;
@@ -1066,6 +1129,22 @@ html[data-theme="system"] .avatar {
 
 .contact {
   padding: 20px;
+}
+.contact-item {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.contact-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.contact-item a[href^="mailto:"],
+.contact-item a[href^="tel:"] {
+  transition: color var(--dur-2) var(--ease-out);
+}
+.contact-item a[href^="mailto:"]:hover,
+.contact-item a[href^="tel:"]:hover {
+  color: var(--brand);
 }
 .contact-row {
   display: flex;
