@@ -1525,57 +1525,65 @@
         if (isMobile) {
           let touchStartY = 0;
           let touchEndY = 0;
+          let touchStartX = 0;
           let touchStartTime = 0;
-          let isSwipeGesture = false;
+          let hasHorizontalIntent = false;
 
-          const SWIPE_THRESHOLD = 40; // Minimum swipe distance (more sensitive)
-          const SWIPE_TIME_THRESHOLD = 400; // Maximum time for swipe (ms) (more forgiving)
-          const SWIPE_VELOCITY_THRESHOLD = 0.2; // Minimum velocity (more sensitive)
+          const SWIPE_THRESHOLD = 40; // Minimum swipe distance
+          const SWIPE_TIME_THRESHOLD = 400; // Maximum time for swipe (ms)
+          const HORIZONTAL_THRESHOLD = 20; // Distance to detect horizontal intent
 
           document.addEventListener("touchstart", (e) => {
-            // Don't interfere with horizontal swipes in projects/persons scroll
-            if (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll") || e.target.closest(".scrollable-content")) {
-              return;
-            }
-
             touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
             touchStartTime = Date.now();
-            isSwipeGesture = false;
+            hasHorizontalIntent = false;
           }, { passive: true });
 
           document.addEventListener("touchmove", (e) => {
-            // Don't interfere with horizontal swipes in projects/persons scroll
-            if (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll") || e.target.closest(".scrollable-content")) {
+            if (!touchStartTime) return;
+
+            const touchY = e.touches[0].clientY;
+            const touchX = e.touches[0].clientX;
+            const deltaY = Math.abs(touchY - touchStartY);
+            const deltaX = Math.abs(touchX - touchStartX);
+
+            // Determine swipe intent - if moved more horizontally, it's for internal scrolling
+            if (deltaX > HORIZONTAL_THRESHOLD && deltaX > deltaY) {
+              hasHorizontalIntent = true;
+            }
+
+            // If horizontal intent detected and we're in a scrollable area, let it handle the swipe
+            if (hasHorizontalIntent && (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll"))) {
+              // Let the horizontal scroll container handle this
               return;
             }
 
-            const touchY = e.touches[0].clientY;
-            const deltaY = Math.abs(touchY - touchStartY);
-            const deltaTime = Date.now() - touchStartTime;
-
-            // Detect if this is a quick swipe gesture
-            if (deltaY > 10 && deltaTime < SWIPE_TIME_THRESHOLD) {
-              const velocity = deltaY / deltaTime;
-              if (velocity > SWIPE_VELOCITY_THRESHOLD) {
-                isSwipeGesture = true;
-              }
+            // For vertical swipes, prevent default only if we're not in scrollable content
+            if (deltaY > deltaX && !e.target.closest(".scrollable-content")) {
+              // Allow vertical scrolling for slide navigation
             }
           }, { passive: true });
 
           document.addEventListener("touchend", (e) => {
-            // Don't interfere with horizontal swipes in projects/persons scroll
-            if (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll") || e.target.closest(".scrollable-content")) {
+            if (!touchStartTime) return;
+
+            const touchEndY = e.changedTouches[0].clientY;
+            const touchEndX = e.changedTouches[0].clientX;
+            const swipeDistanceY = touchStartY - touchEndY;
+            const swipeDistanceX = touchStartX - touchEndX;
+            const swipeTime = Date.now() - touchStartTime;
+            const absSwipeY = Math.abs(swipeDistanceY);
+            const absSwipeX = Math.abs(swipeDistanceX);
+
+            // If horizontal swipe was detected and we're in horizontal scroll area, skip slide navigation
+            if (hasHorizontalIntent && (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll"))) {
               return;
             }
 
-            touchEndY = e.changedTouches[0].clientY;
-            const swipeDistance = touchStartY - touchEndY;
-            const swipeTime = Date.now() - touchStartTime;
-            const swipeVelocity = Math.abs(swipeDistance) / swipeTime;
-
-            // Only trigger on quick, deliberate swipes
-            if (Math.abs(swipeDistance) > SWIPE_THRESHOLD && swipeTime < SWIPE_TIME_THRESHOLD && swipeVelocity > SWIPE_VELOCITY_THRESHOLD) {
-              if (swipeDistance > 0) {
+            // If vertical swipe is dominant and meets thresholds, navigate slides
+            if (absSwipeY > absSwipeX && absSwipeY > SWIPE_THRESHOLD && swipeTime < SWIPE_TIME_THRESHOLD) {
+              if (swipeDistanceY > 0) {
                 // Swipe up - go to next slide
                 goNext();
               } else {
@@ -1583,6 +1591,10 @@
                 goPrev();
               }
             }
+
+            // Reset
+            touchStartTime = 0;
+            hasHorizontalIntent = false;
           }, { passive: true });
         }
         

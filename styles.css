@@ -355,32 +355,50 @@ button:focus-visible {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: stretch;
+    align-items: center; /* Center content horizontally */
+    padding: 0 8px; /* Add some horizontal padding */
   }
   .section-head {
     margin-bottom: 10px;
     flex-shrink: 0;
   }
   .section-head h3 {
-    font-size: clamp(22px, 5.5vw, 30px);
-    margin-bottom: 10px;
+    font-size: clamp(20px, 5vw, 28px);
+    margin-bottom: 8px;
+    /* Ensure text fits */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   .section-head p {
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 13px;
+    line-height: 1.4;
+    /* Ensure text fits */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   .card {
-    padding: 10px;
+    padding: 8px;
+    /* Ensure text doesn't overflow */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
   }
   .card h4 {
-    font-size: 16px;
-    margin-bottom: 8px;
+    font-size: 15px;
+    margin-bottom: 6px;
+    /* Prevent long titles from overflowing */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   .card p,
   .project p {
-    font-size: 13px;
-    line-height: 1.5;
-    margin: 8px 0 0;
+    font-size: 12px;
+    line-height: 1.4;
+    margin: 6px 0 0;
+    /* Ensure text wraps properly */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
   }
   .project-title h4 {
     font-size: 16px;
@@ -488,15 +506,18 @@ body {
   .slide {
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    /* Ensure slide fills viewport */
+    /* Ensure slide fills viewport but not excessively */
     min-height: 100vh;
     min-height: 100dvh;
-    height: 100vh;
-    height: 100dvh;
+    height: auto; /* Allow content to determine height */
+    max-height: 100vh; /* But don't exceed viewport */
+    max-height: 100dvh;
     /* Prevent content overflow */
     overflow: visible;
     /* Prevent zoom on slide */
     touch-action: pan-y;
+    /* Ensure proper sizing */
+    box-sizing: border-box;
     /* Ensure proper box sizing */
     box-sizing: border-box;
   }
@@ -790,6 +811,8 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 0; /* Allow flex shrinking */
+    width: 100%;
+    max-width: 100%;
   }
 
   .projects-scroll,
@@ -829,13 +852,27 @@ body {
   .persons-scroll::-webkit-scrollbar {
     display: none;
   }
-  .projects-scroll .project,
-  .persons-scroll .person-scrollable {
-    flex: 0 0 calc(100% - 28px);
-    min-width: calc(100% - 28px);
-    max-width: calc(100% - 28px);
+  .projects-scroll .project {
+    flex: 0 0 85vw; /* Use viewport width for better mobile sizing */
+    min-width: 280px; /* Minimum readable width */
+    max-width: calc(100vw - 40px); /* Don't exceed screen width */
     scroll-snap-align: center;
     scroll-snap-stop: always;
+    /* Ensure text wraps and fits */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .persons-scroll .person-scrollable {
+    flex: 0 0 85vw; /* Use viewport width for better mobile sizing */
+    min-width: 280px; /* Minimum readable width */
+    max-width: calc(100vw - 40px); /* Don't exceed screen width */
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    /* Ensure proper height constraints */
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 @media (min-width: 901px) {
