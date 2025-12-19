@@ -2011,9 +2011,13 @@
     </script>
 
     <!-- Version indicator at bottom of page -->
-    <div id="version-indicator" style="display: none;">v0.1 • Oppdatert 19. desember 2025</div>
+    <div id="version-indicator"></div>
 
     <script>
+      // Version constants (must match the ones in main script)
+      const VERSION = 'v0.1';
+      const LAST_UPDATED = '19. desember 2025';
+
       // Set version info at bottom of page
       const versionIndicator = document.getElementById('version-indicator');
       if (versionIndicator) {
