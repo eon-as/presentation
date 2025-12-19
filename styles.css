@@ -336,6 +336,61 @@ button:focus-visible {
   align-items: start;
 }
 
+/* Better scaling on mobile - reduce padding and font sizes */
+@media (hover: none) and (pointer: coarse) {
+  .slide {
+    padding: 50px 12px 16px;
+  }
+  .slide-inner {
+    width: 100%;
+    max-width: 100%;
+  }
+  .section-head {
+    margin-bottom: 10px;
+  }
+  .section-head h3 {
+    font-size: clamp(22px, 5.5vw, 30px);
+    margin-bottom: 10px;
+  }
+  .section-head p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .card {
+    padding: 10px;
+  }
+  .card h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .card p,
+  .project p {
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 8px 0 0;
+  }
+  .project-title h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .project-media {
+    margin-top: 8px;
+  }
+  .tl h5 {
+    font-size: 16px;
+  }
+  .tl p {
+    font-size: 13px;
+  }
+  .chips {
+    gap: 6px;
+  }
+  .chip {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+
 /* Mobile viewers (iOS Files/preview, some in-app browsers) can break nested scrolling.
    Improved mobile scrolling with better touch support and scroll-snap. */
 @media (hover: none) and (pointer: coarse) {
@@ -674,7 +729,8 @@ button:focus-visible {
     /* Hide scrollbar but keep functionality */
     scrollbar-width: none;
     -ms-overflow-style: none;
-    touch-action: pan-x;
+    /* Allow both horizontal and vertical touch actions for smart detection */
+    touch-action: pan-x pan-y;
     /* Visual indicator that there's more content - gradient fade */
     position: relative;
   }

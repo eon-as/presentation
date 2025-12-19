@@ -416,7 +416,20 @@
                 <div class="card" style="margin-top:14px; margin-bottom:0">
                   <h4>Utdanning</h4>
                   <div class="timeline" style="margin-top:12px">
-                    <!-- Utdanningsinformasjon kan legges til her -->
+                    <div class="tl">
+                      <div class="tl-top">
+                        <h5>Befalskole</h5>
+                        <div class="when">2006</div>
+                      </div>
+                      <p>Luftforsvarets skolesenter Kjevik</p>
+                    </div>
+                    <div class="tl">
+                      <div class="tl-top">
+                        <h5>Elektronikk</h5>
+                        <div class="when">2005</div>
+                      </div>
+                      <p>Horten videregående skole</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1504,10 +1517,28 @@
         // Use appropriate scroll container
         scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
         
-        // Prevent scrollable-content scroll from bubbling and triggering slide navigation
+        // Handle scrollable-content scrolling - allow vertical scroll to trigger slide navigation on mobile
         document.querySelectorAll(".scrollable-content").forEach((content) => {
+          let scrollStartY = 0;
+          let isScrolling = false;
+          
+          content.addEventListener("touchstart", (e) => {
+            scrollStartY = content.scrollTop;
+            isScrolling = false;
+          }, { passive: true });
+          
           content.addEventListener("scroll", (e) => {
-            e.stopPropagation();
+            isScrolling = true;
+            // On mobile, if scrolled to top/bottom of scrollable-content, allow page scroll
+            const isAtTop = content.scrollTop <= 0;
+            const isAtBottom = content.scrollTop >= content.scrollHeight - content.clientHeight - 5;
+            
+            // If at edges, don't stop propagation - allow slide navigation
+            if (isMobile && (isAtTop || isAtBottom)) {
+              // Allow the scroll to bubble for slide navigation
+            } else {
+              e.stopPropagation();
+            }
           }, { passive: true });
         });
         
@@ -1610,7 +1641,7 @@
           btn.addEventListener("click", () => closeModal(btn.closest(".modal")));
         });
 
-        // Persons swipe functionality for mobile
+        // Persons swipe functionality for mobile with smart scroll detection
         (function setupPersonsSwipe() {
           const personsScroll = document.querySelector(".persons-scroll");
           if (!personsScroll) return;
@@ -1621,36 +1652,61 @@
           let touchStartX = 0;
           let touchEndX = 0;
           let touchStartY = 0;
-          let isScrolling = false;
+          let touchEndY = 0;
           let scrollStartX = 0;
+          let scrollStartY = 0;
+          let isHorizontalSwipe = false;
+          let hasMoved = false;
+
+          // Dead zone thresholds - more forgiving
+          const HORIZONTAL_THRESHOLD = 35; // Minimum horizontal movement to trigger horizontal swipe
+          const VERTICAL_THRESHOLD = 50; // Minimum vertical movement to trigger vertical scroll (slide change)
+          const DIRECTION_RATIO = 1.3; // Horizontal must be this much larger than vertical to be considered horizontal
 
           personsScroll.addEventListener("touchstart", (e) => {
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
             scrollStartX = personsScroll.scrollLeft;
-            isScrolling = false;
+            scrollStartY = window.scrollY;
+            isHorizontalSwipe = false;
+            hasMoved = false;
           }, { passive: true });
 
           personsScroll.addEventListener("touchmove", (e) => {
-            isScrolling = true;
-            // Prevent vertical scroll when swiping horizontally
-            const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
-            const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
-            if (deltaX > deltaY && deltaX > 10) {
+            if (!hasMoved) {
+              const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+              const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+              
+              // Determine if this is primarily horizontal or vertical movement
+              if (deltaX > HORIZONTAL_THRESHOLD && deltaX > deltaY * DIRECTION_RATIO) {
+                isHorizontalSwipe = true;
+              } else if (deltaY > VERTICAL_THRESHOLD && deltaY > deltaX * DIRECTION_RATIO) {
+                isHorizontalSwipe = false;
+              }
+              hasMoved = deltaX > 10 || deltaY > 10;
+            }
+
+            // If horizontal swipe, prevent vertical scroll
+            if (isHorizontalSwipe && hasMoved) {
               e.preventDefault();
             }
           }, { passive: false });
 
           personsScroll.addEventListener("touchend", (e) => {
-            if (!isScrolling) return;
+            if (!hasMoved) return;
+            
             touchEndX = e.changedTouches[0].clientX;
-            const swipeDistance = touchStartX - touchEndX;
-            const swipeThreshold = 50; // Minimum swipe distance
+            touchEndY = e.changedTouches[0].clientY;
+            const swipeDistanceX = touchStartX - touchEndX;
+            const swipeDistanceY = touchStartY - touchEndY;
+            const absX = Math.abs(swipeDistanceX);
+            const absY = Math.abs(swipeDistanceY);
 
-            if (Math.abs(swipeDistance) > swipeThreshold) {
-              const scrollAmount = personsScroll.offsetWidth * 0.85; // Scroll ~85% of container width
+            // Horizontal swipe: navigate between profiles
+            if (isHorizontalSwipe && absX > HORIZONTAL_THRESHOLD) {
+              const scrollAmount = personsScroll.offsetWidth * 0.85;
               const currentScroll = personsScroll.scrollLeft;
-              const targetScroll = swipeDistance > 0 
+              const targetScroll = swipeDistanceX > 0 
                 ? currentScroll + scrollAmount // Swipe left (next)
                 : currentScroll - scrollAmount; // Swipe right (previous)
 
@@ -1659,10 +1715,18 @@
                 behavior: "smooth"
               });
             }
+            // Vertical scroll: navigate to next/previous slide if at top/bottom
+            if (!isHorizontalSwipe && absY > VERTICAL_THRESHOLD && absY > absX) {
+              // If at the top and scrolling up, or at bottom and scrolling down, allow slide navigation
+              const isAtTop = personsScroll.scrollLeft <= 5;
+              const isAtBottom = personsScroll.scrollLeft >= personsScroll.scrollWidth - personsScroll.offsetWidth - 5;
+              
+              // Don't prevent default - let the vertical scroll continue to trigger slide navigation
+            }
           }, { passive: true });
         })();
 
-        // Projects swipe functionality for mobile
+        // Projects swipe functionality for mobile with smart scroll detection
         (function setupProjectsSwipe() {
           const projectsScroll = document.querySelector(".projects-scroll");
           if (!projectsScroll) return;
@@ -1672,38 +1736,62 @@
 
           let touchStartX = 0;
           let touchEndX = 0;
-          let isScrolling = false;
-          let scrollStartX = 0;
-
           let touchStartY = 0;
+          let touchEndY = 0;
+          let scrollStartX = 0;
+          let scrollStartY = 0;
+          let isHorizontalSwipe = false;
+          let hasMoved = false;
+
+          // Dead zone thresholds - more forgiving
+          const HORIZONTAL_THRESHOLD = 35; // Minimum horizontal movement to trigger horizontal swipe
+          const VERTICAL_THRESHOLD = 50; // Minimum vertical movement to trigger vertical scroll (slide change)
+          const DIRECTION_RATIO = 1.3; // Horizontal must be this much larger than vertical to be considered horizontal
 
           projectsScroll.addEventListener("touchstart", (e) => {
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
             scrollStartX = projectsScroll.scrollLeft;
-            isScrolling = false;
+            scrollStartY = window.scrollY;
+            isHorizontalSwipe = false;
+            hasMoved = false;
           }, { passive: true });
 
           projectsScroll.addEventListener("touchmove", (e) => {
-            isScrolling = true;
-            // Prevent vertical scroll when swiping horizontally
-            const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
-            const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
-            if (deltaX > deltaY && deltaX > 10) {
+            if (!hasMoved) {
+              const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+              const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+              
+              // Determine if this is primarily horizontal or vertical movement
+              if (deltaX > HORIZONTAL_THRESHOLD && deltaX > deltaY * DIRECTION_RATIO) {
+                isHorizontalSwipe = true;
+              } else if (deltaY > VERTICAL_THRESHOLD && deltaY > deltaX * DIRECTION_RATIO) {
+                isHorizontalSwipe = false;
+              }
+              hasMoved = deltaX > 10 || deltaY > 10;
+            }
+
+            // If horizontal swipe, prevent vertical scroll
+            if (isHorizontalSwipe && hasMoved) {
               e.preventDefault();
             }
           }, { passive: false });
 
           projectsScroll.addEventListener("touchend", (e) => {
-            if (!isScrolling) return;
+            if (!hasMoved) return;
+            
             touchEndX = e.changedTouches[0].clientX;
-            const swipeDistance = touchStartX - touchEndX;
-            const swipeThreshold = 50; // Minimum swipe distance
+            touchEndY = e.changedTouches[0].clientY;
+            const swipeDistanceX = touchStartX - touchEndX;
+            const swipeDistanceY = touchStartY - touchEndY;
+            const absX = Math.abs(swipeDistanceX);
+            const absY = Math.abs(swipeDistanceY);
 
-            if (Math.abs(swipeDistance) > swipeThreshold) {
-              const scrollAmount = projectsScroll.offsetWidth * 0.85; // Scroll ~85% of container width
+            // Horizontal swipe: navigate between projects
+            if (isHorizontalSwipe && absX > HORIZONTAL_THRESHOLD) {
+              const scrollAmount = projectsScroll.offsetWidth * 0.85;
               const currentScroll = projectsScroll.scrollLeft;
-              const targetScroll = swipeDistance > 0 
+              const targetScroll = swipeDistanceX > 0 
                 ? currentScroll + scrollAmount // Swipe left (next)
                 : currentScroll - scrollAmount; // Swipe right (previous)
 
@@ -1711,6 +1799,14 @@
                 left: Math.max(0, Math.min(targetScroll, projectsScroll.scrollWidth - projectsScroll.offsetWidth)),
                 behavior: "smooth"
               });
+            }
+            // Vertical scroll: navigate to next/previous slide if at top/bottom
+            if (!isHorizontalSwipe && absY > VERTICAL_THRESHOLD && absY > absX) {
+              // If at the top and scrolling up, or at bottom and scrolling down, allow slide navigation
+              const isAtTop = projectsScroll.scrollLeft <= 5;
+              const isAtBottom = projectsScroll.scrollLeft >= projectsScroll.scrollWidth - projectsScroll.offsetWidth - 5;
+              
+              // Don't prevent default - let the vertical scroll continue to trigger slide navigation
             }
           }, { passive: true });
         })();
