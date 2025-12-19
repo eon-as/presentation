@@ -1254,7 +1254,7 @@
     <script>
       (() => {
         // Version info - bump this when making changes
-        const VERSION = 'v0.8';
+        const VERSION = 'v0.9';
         const LAST_UPDATED = '19. desember 2025';
 
         const root = document.documentElement;
@@ -1579,8 +1579,16 @@
           }, { passive: true });
 
           content.addEventListener("touchmove", (e) => {
+            const touchX = e.touches[0].clientX;
             const touchY = e.touches[0].clientY;
+            const deltaX = Math.abs(touchX - touchStartX);
             const deltaY = Math.abs(touchY - touchStartY);
+
+            // If horizontal movement dominates, allow swipe navigation to work
+            if (deltaX > deltaY && deltaX > 15) {
+              // Let horizontal swipe bubble up for profile/project navigation
+              return;
+            }
 
             // If we've moved more than 20px vertically while in content, prevent slide navigation
             if (deltaY > 20 && content.scrollTop > 10 && content.scrollTop < content.scrollHeight - content.clientHeight - 10) {
@@ -1705,10 +1713,8 @@
           const VERTICAL_THRESHOLD = 50; // Minimum vertical movement to trigger vertical scroll (slide change)
           const DIRECTION_RATIO = 1.3; // Horizontal must be this much larger than vertical to be considered horizontal
 
-          // Listen on entire slide-2 for horizontal swipes
+          // Listen on entire slide-2 for horizontal swipes (including scrollable content)
           slide2.addEventListener("touchstart", (e) => {
-            // Don't interfere if we're in scrollable content areas
-            if (e.target.closest(".scrollable-content")) return;
 
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
@@ -1719,8 +1725,6 @@
           }, { passive: true });
 
           slide2.addEventListener("touchmove", (e) => {
-            // Don't interfere if we're in scrollable content areas
-            if (e.target.closest(".scrollable-content")) return;
 
             if (!hasMoved) {
               const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
@@ -1742,8 +1746,6 @@
           }, { passive: false });
 
           slide2.addEventListener("touchend", (e) => {
-            // Don't interfere if we're in scrollable content areas
-            if (e.target.closest(".scrollable-content")) return;
 
             if (!hasMoved) return;
 
@@ -1794,10 +1796,8 @@
           const VERTICAL_THRESHOLD = 50; // Minimum vertical movement to trigger vertical scroll (slide change)
           const DIRECTION_RATIO = 1.3; // Horizontal must be this much larger than vertical to be considered horizontal
 
-          // Listen on entire slide-3 for horizontal swipes
+          // Listen on entire slide-3 for horizontal swipes (including scrollable content)
           slide3.addEventListener("touchstart", (e) => {
-            // Don't interfere if we're in scrollable content areas
-            if (e.target.closest(".scrollable-content")) return;
 
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
@@ -1808,8 +1808,6 @@
           }, { passive: true });
 
           slide3.addEventListener("touchmove", (e) => {
-            // Don't interfere if we're in scrollable content areas
-            if (e.target.closest(".scrollable-content")) return;
 
             if (!hasMoved) {
               const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
@@ -1831,8 +1829,6 @@
           }, { passive: false });
 
           slide3.addEventListener("touchend", (e) => {
-            // Don't interfere if we're in scrollable content areas
-            if (e.target.closest(".scrollable-content")) return;
 
             if (!hasMoved) return;
 
@@ -1981,7 +1977,7 @@
 
     <script>
       // Version constants (must match the ones in main script)
-      const VERSION = 'v0.8';
+      const VERSION = 'v0.9';
       const LAST_UPDATED = '19. desember 2025';
 
       // Set version info at bottom of page
