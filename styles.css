@@ -512,6 +512,7 @@ body {
   html {
     scroll-snap-type: y mandatory;
     scroll-padding-top: 84px;
+    scroll-padding-bottom: env(safe-area-inset-bottom, 34px);
     scroll-behavior: smooth;
     /* Prevent zoom */
     touch-action: pan-x pan-y;
@@ -520,7 +521,19 @@ body {
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
-  
+
+  /* iOS Safari specific fixes for address bar */
+  @supports (-webkit-touch-callout: none) {
+    .slide {
+      /* Extra bottom padding for iOS Safari address bar */
+      padding-bottom: max(env(safe-area-inset-bottom), 34px);
+    }
+    .scroll {
+      /* Ensure proper scrolling with iOS Safari address bar */
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+  }
+
   /* Better slide sizing on mobile */
   .slide-inner {
     width: 100%;
@@ -543,6 +556,8 @@ body {
     /* Allow slides to grow taller than viewport if content requires it */
     min-height: 100vh;
     min-height: 100dvh;
+    /* Extra padding bottom for iOS Safari address bar */
+    padding-bottom: env(safe-area-inset-bottom, 34px);
     /* Allow content to scroll internally when taller than viewport */
     overflow: visible;
     /* Prevent zoom on slide */
