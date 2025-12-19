@@ -215,8 +215,9 @@
             </div>
           </div>
 
-          <div class="grid two" data-reveal>
-            <article class="card person-scrollable" aria-label="Person 1">
+          <div class="persons-container" data-reveal>
+            <div class="persons-scroll">
+              <article class="card person-scrollable" aria-label="Person 1">
               <div class="person-header">
                 <img class="avatar avatar-photo" data-inline="erik_profile" alt="Erik Nerhus" style="width: 120px; height: 120px;" />
                 <div>
@@ -420,6 +421,7 @@
                 </div>
               </div>
             </article>
+            </div>
           </div>
         </div>
       </section>
@@ -1486,7 +1488,11 @@
         }
 
         let rafId = 0;
-        function handleScroll() {
+        function handleScroll(e) {
+          // Don't handle scroll events from scrollable-content (profile scrolling)
+          if (e && e.target && e.target.closest(".scrollable-content")) {
+            return;
+          }
           cancelAnimationFrame(rafId);
           rafId = requestAnimationFrame(() => {
             setCurrentDot(getClosestSlideIndex());
@@ -1497,6 +1503,13 @@
         
         // Use appropriate scroll container
         scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
+        
+        // Prevent scrollable-content scroll from bubbling and triggering slide navigation
+        document.querySelectorAll(".scrollable-content").forEach((content) => {
+          content.addEventListener("scroll", (e) => {
+            e.stopPropagation();
+          }, { passive: true });
+        });
         
         // Initial progress update
         updateScrollProgress();
@@ -1596,6 +1609,58 @@
         document.querySelectorAll("[data-close-modal]").forEach((btn) => {
           btn.addEventListener("click", () => closeModal(btn.closest(".modal")));
         });
+
+        // Persons swipe functionality for mobile
+        (function setupPersonsSwipe() {
+          const personsScroll = document.querySelector(".persons-scroll");
+          if (!personsScroll) return;
+
+          const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+          if (!isTouchDevice) return;
+
+          let touchStartX = 0;
+          let touchEndX = 0;
+          let touchStartY = 0;
+          let isScrolling = false;
+          let scrollStartX = 0;
+
+          personsScroll.addEventListener("touchstart", (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            scrollStartX = personsScroll.scrollLeft;
+            isScrolling = false;
+          }, { passive: true });
+
+          personsScroll.addEventListener("touchmove", (e) => {
+            isScrolling = true;
+            // Prevent vertical scroll when swiping horizontally
+            const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+            const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+            if (deltaX > deltaY && deltaX > 10) {
+              e.preventDefault();
+            }
+          }, { passive: false });
+
+          personsScroll.addEventListener("touchend", (e) => {
+            if (!isScrolling) return;
+            touchEndX = e.changedTouches[0].clientX;
+            const swipeDistance = touchStartX - touchEndX;
+            const swipeThreshold = 50; // Minimum swipe distance
+
+            if (Math.abs(swipeDistance) > swipeThreshold) {
+              const scrollAmount = personsScroll.offsetWidth * 0.85; // Scroll ~85% of container width
+              const currentScroll = personsScroll.scrollLeft;
+              const targetScroll = swipeDistance > 0 
+                ? currentScroll + scrollAmount // Swipe left (next)
+                : currentScroll - scrollAmount; // Swipe right (previous)
+
+              personsScroll.scrollTo({
+                left: Math.max(0, Math.min(targetScroll, personsScroll.scrollWidth - personsScroll.offsetWidth)),
+                behavior: "smooth"
+              });
+            }
+          }, { passive: true });
+        })();
 
         // Projects swipe functionality for mobile
         (function setupProjectsSwipe() {

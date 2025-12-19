@@ -365,12 +365,17 @@ button:focus-visible {
     scroll-behavior: smooth;
   }
   
-  /* Ensure slides snap properly on mobile */
+  /* Ensure slides snap properly on mobile, but allow exceptions */
   .slide {
     scroll-snap-align: start;
     scroll-snap-stop: always;
     min-height: 100vh;
     min-height: 100dvh;
+  }
+  /* Disable scroll-snap for slide-2 (Team) on mobile to allow scrolling inside profiles */
+  #slide-2 {
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
   }
   
   /* Improve touch scrolling performance */
@@ -641,16 +646,22 @@ button:focus-visible {
 }
 
 /* Projects swipe container for mobile */
-.projects-container {
+.projects-container,
+.persons-container {
   width: 100%;
 }
-.projects-scroll {
+.projects-scroll,
+.persons-scroll {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
+.persons-scroll {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
 @media (hover: none) and (pointer: coarse) {
-  .projects-scroll {
+  .projects-scroll,
+  .persons-scroll {
     display: flex;
     overflow-x: auto;
     overflow-y: hidden;
@@ -664,11 +675,27 @@ button:focus-visible {
     scrollbar-width: none;
     -ms-overflow-style: none;
     touch-action: pan-x;
+    /* Visual indicator that there's more content - gradient fade */
+    position: relative;
   }
-  .projects-scroll::-webkit-scrollbar {
+  .projects-scroll::after,
+  .persons-scroll::after {
+    content: "";
+    position: sticky;
+    right: -14px;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to left, var(--bg), transparent);
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+  .projects-scroll::-webkit-scrollbar,
+  .persons-scroll::-webkit-scrollbar {
     display: none;
   }
-  .projects-scroll .project {
+  .projects-scroll .project,
+  .persons-scroll .person-scrollable {
     flex: 0 0 calc(100% - 28px);
     min-width: calc(100% - 28px);
     max-width: calc(100% - 28px);
@@ -680,6 +707,10 @@ button:focus-visible {
   .projects-scroll {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .persons-scroll {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -981,6 +1012,13 @@ html[data-theme="light"] .modal-head {
   max-height: calc(100vh - 300px);
   min-height: 450px;
 }
+@media (hover: none) and (pointer: coarse) {
+  .person-scrollable {
+    max-height: calc(100vh - 200px);
+    min-height: 500px;
+    height: auto;
+  }
+}
 
 .person-header {
   display: flex;
@@ -1012,6 +1050,9 @@ html[data-theme="light"] .modal-head {
   padding-right: 8px;
   margin-right: -8px;
   padding-bottom: 8px;
+  /* Prevent scroll events from bubbling to parent on mobile */
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 .scrollable-content .card {
