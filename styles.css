@@ -1530,13 +1530,13 @@ html[data-theme="system"] .avatar {
 
   /* Reduce text sizes for better mobile fit */
   .section-head h3 {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .person-header h4,
   .person h4,
   .project-title h4 {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .hero h2 {
