@@ -1192,43 +1192,47 @@ body {
   background: var(--panel2);
   box-shadow: var(--shadow-lg);
 }
-html[data-theme="dark"] .modal-dialog,
-html[data-theme="system"] .modal-dialog {
-  background: rgba(11, 16, 32, 0.95);
-}
+/* Desktop modal theme rules - isolated to avoid conflicts with mobile */
+@media (hover: hover) {
+  html[data-theme="dark"] .modal-dialog,
+  html[data-theme="system"] .modal-dialog {
+    background: rgba(11, 16, 32, 0.95);
+  }
 
-/* Dark theme modal content */
-html[data-theme="dark"] .modal .tl,
-html[data-theme="system"] .modal .tl {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: var(--line);
-}
+  /* Dark theme modal content */
+  html[data-theme="dark"] .modal .tl,
+  html[data-theme="system"] .modal .tl {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--line);
+  }
 
-html[data-theme="dark"] .modal .bullets,
-html[data-theme="system"] .modal .bullets {
-  color: var(--muted);
-}
+  html[data-theme="dark"] .modal .bullets,
+  html[data-theme="system"] .modal .bullets {
+    color: var(--muted);
+  }
 
-html[data-theme="dark"] .modal .muted.small,
-html[data-theme="system"] .modal .muted.small {
-  color: var(--muted);
-}
-html[data-theme="light"] .modal-dialog {
-  background: rgba(255, 255, 255, 0.95);
-}
+  html[data-theme="dark"] .modal .muted.small,
+  html[data-theme="system"] .modal .muted.small {
+    color: var(--muted);
+  }
 
-/* Theme-aware modal content */
-html[data-theme="light"] .modal .tl {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(0, 0, 0, 0.1);
-}
+  html[data-theme="light"] .modal-dialog {
+    background: rgba(255, 255, 255, 0.95);
+  }
 
-html[data-theme="light"] .modal .bullets {
-  color: rgba(0, 0, 0, 0.7);
-}
+  /* Theme-aware modal content */
+  html[data-theme="light"] .modal .tl {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
 
-html[data-theme="light"] .modal .muted.small {
-  color: rgba(0, 0, 0, 0.6);
+  html[data-theme="light"] .modal .bullets {
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  html[data-theme="light"] .modal .muted.small {
+    color: rgba(0, 0, 0, 0.6);
+  }
 }
 .modal-head {
   position: sticky;
@@ -1297,8 +1301,14 @@ html[data-theme="light"] .modal .muted.small {
     background: var(--panel2); /* Dark theme fallback */
   }
 
+  .modal-head {
+    /* Base mobile modal head styling */
+    background: var(--panel2) !important; /* Dark theme fallback */
+  }
+
   .modal-head strong {
     font-size: 16px; /* Smaller title on mobile */
+    color: var(--text) !important; /* Ensure text is visible */
   }
 
   /* Override with theme-specific backgrounds - ensure they take precedence */
@@ -1306,13 +1316,33 @@ html[data-theme="light"] .modal .muted.small {
     background: rgba(255, 255, 255, 0.95) !important;
   }
 
+  html[data-theme="light"] .modal-head strong {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
   html[data-theme="dark"] .modal-head,
   html[data-theme="system"] .modal-head {
     background: var(--panel2) !important;
   }
 
+  html[data-theme="dark"] .modal-head strong,
+  html[data-theme="system"] .modal-head strong {
+    color: var(--text) !important;
+  }
+
   .modal-body {
     padding: 16px 18px;
+    color: var(--text) !important; /* Ensure body text follows theme */
+  }
+
+  /* Theme-specific modal body text colors */
+  html[data-theme="light"] .modal-body {
+    color: rgba(0, 0, 0, 0.9) !important;
+  }
+
+  html[data-theme="dark"] .modal-body,
+  html[data-theme="system"] .modal-body {
+    color: var(--text) !important;
   }
 
   .modal .btn {
@@ -1400,14 +1430,16 @@ html[data-theme="light"] .modal .muted.small {
   color: var(--muted);
 }
 
-/* Theme-aware modal head backgrounds */
-html[data-theme="dark"] .modal-head,
-html[data-theme="system"] .modal-head {
-  background: var(--panel2);
-}
+/* Theme-aware modal head backgrounds - desktop only (mobile rules are in media query) */
+@media (hover: hover) {
+  html[data-theme="dark"] .modal-head,
+  html[data-theme="system"] .modal-head {
+    background: var(--panel2);
+  }
 
-html[data-theme="light"] .modal-head {
-  background: rgba(255, 255, 255, 0.95);
+  html[data-theme="light"] .modal-head {
+    background: rgba(255, 255, 255, 0.95);
+  }
 }
 .bullets li {
   margin: 6px 0;
