@@ -340,13 +340,26 @@ button:focus-visible {
 @media (hover: none) and (pointer: coarse) {
   .slide {
     padding: 50px 12px 16px;
+    /* Use flexbox for better mobile layout control */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
   .slide-inner {
     width: 100%;
     max-width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
   }
   .section-head {
     margin-bottom: 10px;
+    flex-shrink: 0;
   }
   .section-head h3 {
     font-size: clamp(22px, 5.5vw, 30px);
@@ -409,6 +422,12 @@ body {
 /* Mobile viewers (iOS Files/preview, some in-app browsers) can break nested scrolling.
    Improved mobile scrolling with better touch support and scroll-snap. */
 @media (hover: none) and (pointer: coarse) {
+  /* Ensure consistent height across different mobile devices */
+  html, body {
+    height: 100%;
+    height: 100vh;
+    height: 100dvh;
+  }
   html {
     /* Prevent zoom */
     touch-action: pan-x pan-y;
@@ -472,16 +491,16 @@ body {
     /* Ensure slide fills viewport */
     min-height: 100vh;
     min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
     /* Prevent content overflow */
     overflow: visible;
     /* Prevent zoom on slide */
     touch-action: pan-y;
+    /* Ensure proper box sizing */
+    box-sizing: border-box;
   }
-  /* Disable scroll-snap for slide-2 (Team) on mobile to allow scrolling inside profiles */
-  #slide-2 {
-    scroll-snap-align: none;
-    scroll-snap-stop: normal;
-  }
+  /* Keep scroll-snap for slide-2 on mobile, but handle touch events smarter */
   
   /* Improve touch scrolling performance */
   .scroll,
@@ -765,6 +784,14 @@ body {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 @media (hover: none) and (pointer: coarse) {
+  .projects-container,
+  .persons-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* Allow flex shrinking */
+  }
+
   .projects-scroll,
   .persons-scroll {
     display: flex;
@@ -783,6 +810,8 @@ body {
     touch-action: pan-x pan-y;
     /* Visual indicator that there's more content - gradient fade */
     position: relative;
+    flex: 1;
+    align-items: stretch;
   }
   .projects-scroll::after,
   .persons-scroll::after {
@@ -1120,9 +1149,10 @@ html[data-theme="light"] .modal-head {
 }
 @media (hover: none) and (pointer: coarse) {
   .person-scrollable {
-    max-height: calc(100vh - 200px);
-    min-height: 500px;
+    max-height: calc(100vh - 150px);
+    min-height: calc(100vh - 200px);
     height: auto;
+    flex: 1;
   }
 }
 

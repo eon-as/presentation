@@ -1528,33 +1528,24 @@
           let touchStartTime = 0;
           let isSwipeGesture = false;
 
-          const SWIPE_THRESHOLD = 50; // Minimum swipe distance
-          const SWIPE_TIME_THRESHOLD = 300; // Maximum time for swipe (ms)
-          const SWIPE_VELOCITY_THRESHOLD = 0.3; // Minimum velocity
+          const SWIPE_THRESHOLD = 40; // Minimum swipe distance (more sensitive)
+          const SWIPE_TIME_THRESHOLD = 400; // Maximum time for swipe (ms) (more forgiving)
+          const SWIPE_VELOCITY_THRESHOLD = 0.2; // Minimum velocity (more sensitive)
 
-          // #region agent log - Hypothesis A: Touch events being captured by wrong elements
           document.addEventListener("touchstart", (e) => {
-            fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'A',location:'index.html:1519',message:'Touch start detected',data:{target:e.target.tagName,targetClass:e.target.className,closestProjects:e.target.closest(".projects-scroll")!==null,closestPersons:e.target.closest(".persons-scroll")!==null,closestScrollable:e.target.closest(".scrollable-content")!==null},timestamp:Date.now()})}).catch(()=>{});
-
             // Don't interfere with horizontal swipes in projects/persons scroll
             if (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll") || e.target.closest(".scrollable-content")) {
-              fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'A',location:'index.html:1522',message:'Touch start ignored - in scrollable area',data:{},timestamp:Date.now()})}).catch(()=>{});
               return;
             }
 
             touchStartY = e.touches[0].clientY;
             touchStartTime = Date.now();
             isSwipeGesture = false;
-
-            fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'A',location:'index.html:1526',message:'Touch start processed',data:{touchStartY:touchStartY},timestamp:Date.now()})}).catch(()=>{});
           }, { passive: true });
-          // #endregion
 
-          // #region agent log - Hypothesis B: Touch move detection not working properly
           document.addEventListener("touchmove", (e) => {
             // Don't interfere with horizontal swipes in projects/persons scroll
             if (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll") || e.target.closest(".scrollable-content")) {
-              fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'B',location:'index.html:1531',message:'Touch move ignored - in scrollable area',data:{},timestamp:Date.now()})}).catch(()=>{});
               return;
             }
 
@@ -1562,24 +1553,18 @@
             const deltaY = Math.abs(touchY - touchStartY);
             const deltaTime = Date.now() - touchStartTime;
 
-            fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'B',location:'index.html:1536',message:'Touch move processed',data:{touchY:touchY,deltaY:deltaY,deltaTime:deltaTime},timestamp:Date.now()})}).catch(()=>{});
-
             // Detect if this is a quick swipe gesture
             if (deltaY > 10 && deltaTime < SWIPE_TIME_THRESHOLD) {
               const velocity = deltaY / deltaTime;
               if (velocity > SWIPE_VELOCITY_THRESHOLD) {
                 isSwipeGesture = true;
-                fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'B',location:'index.html:1540',message:'Swipe gesture detected',data:{velocity:velocity,isSwipeGesture:isSwipeGesture},timestamp:Date.now()})}).catch(()=>{});
               }
             }
           }, { passive: true });
-          // #endregion
 
-          // #region agent log - Hypothesis C: Touch end not triggering slide navigation
           document.addEventListener("touchend", (e) => {
             // Don't interfere with horizontal swipes in projects/persons scroll
             if (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll") || e.target.closest(".scrollable-content")) {
-              fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'C',location:'index.html:1547',message:'Touch end ignored - in scrollable area',data:{},timestamp:Date.now()})}).catch(()=>{});
               return;
             }
 
@@ -1588,12 +1573,8 @@
             const swipeTime = Date.now() - touchStartTime;
             const swipeVelocity = Math.abs(swipeDistance) / swipeTime;
 
-            fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'C',location:'index.html:1552',message:'Touch end processed',data:{touchEndY:touchEndY,swipeDistance:swipeDistance,swipeTime:swipeTime,swipeVelocity:swipeVelocity},timestamp:Date.now()})}).catch(()=>{});
-
             // Only trigger on quick, deliberate swipes
             if (Math.abs(swipeDistance) > SWIPE_THRESHOLD && swipeTime < SWIPE_TIME_THRESHOLD && swipeVelocity > SWIPE_VELOCITY_THRESHOLD) {
-              fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'C',location:'index.html:1556',message:'Swipe threshold met - will navigate',data:{direction:swipeDistance>0?'next':'prev'},timestamp:Date.now()})}).catch(()=>{});
-
               if (swipeDistance > 0) {
                 // Swipe up - go to next slide
                 goNext();
@@ -1601,33 +1582,45 @@
                 // Swipe down - go to previous slide
                 goPrev();
               }
-            } else {
-              fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'C',location:'index.html:1564',message:'Swipe threshold NOT met',data:{swipeDistance:Math.abs(swipeDistance),swipeTime:swipeTime,swipeVelocity:swipeVelocity},timestamp:Date.now()})}).catch(()=>{});
             }
           }, { passive: true });
-          // #endregion
         }
         
-        // Handle scrollable-content scrolling - allow vertical scroll to trigger slide navigation on mobile
+        // Handle scrollable-content scrolling - smarter mobile navigation
         document.querySelectorAll(".scrollable-content").forEach((content) => {
-          let scrollStartY = 0;
-          let isScrolling = false;
-          
-          content.addEventListener("touchstart", (e) => {
-            scrollStartY = content.scrollTop;
-            isScrolling = false;
-          }, { passive: true });
-          
+          let lastScrollTop = 0;
+          let scrollDirection = 0;
+
           content.addEventListener("scroll", (e) => {
-            isScrolling = true;
-            // On mobile, if scrolled to top/bottom of scrollable-content, allow page scroll
-            const isAtTop = content.scrollTop <= 0;
-            const isAtBottom = content.scrollTop >= content.scrollHeight - content.clientHeight - 5;
-            
-            // If at edges, don't stop propagation - allow slide navigation
-            if (isMobile && (isAtTop || isAtBottom)) {
-              // Allow the scroll to bubble for slide navigation
-            } else {
+            const currentScrollTop = content.scrollTop;
+            scrollDirection = currentScrollTop - lastScrollTop;
+            lastScrollTop = currentScrollTop;
+
+            // On mobile, allow slide navigation when scrolling at edges or with momentum
+            const isAtTop = currentScrollTop <= 10;
+            const isAtBottom = currentScrollTop >= content.scrollHeight - content.clientHeight - 10;
+            const isScrollingDownAtTop = isAtTop && scrollDirection > 0;
+            const isScrollingUpAtBottom = isAtBottom && scrollDirection < 0;
+
+            // Stop propagation only when we're in the middle of content scrolling
+            if (isMobile && !(isAtTop || isAtBottom || isScrollingDownAtTop || isScrollingUpAtBottom)) {
+              e.stopPropagation();
+            }
+            // Otherwise, let the scroll event bubble up for slide navigation
+          }, { passive: true });
+
+          // Prevent touch events from bubbling when we're actively scrolling in content
+          let touchStartY = 0;
+          content.addEventListener("touchstart", (e) => {
+            touchStartY = e.touches[0].clientY;
+          }, { passive: true });
+
+          content.addEventListener("touchmove", (e) => {
+            const touchY = e.touches[0].clientY;
+            const deltaY = Math.abs(touchY - touchStartY);
+
+            // If we've moved more than 20px vertically while in content, prevent slide navigation
+            if (deltaY > 20 && content.scrollTop > 10 && content.scrollTop < content.scrollHeight - content.clientHeight - 10) {
               e.stopPropagation();
             }
           }, { passive: true });
@@ -2003,25 +1996,6 @@
         // Version info is now set at bottom of page
       })();
 
-      // #region agent log - Hypothesis E: Viewport and zoom settings not working
-      window.addEventListener('load', () => {
-        fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'E',location:'index.html:1985',message:'Page loaded - viewport info',data:{viewportWidth:window.innerWidth,viewportHeight:window.innerHeight,devicePixelRatio:window.devicePixelRatio,userAgent:navigator.userAgent,isMobile:window.matchMedia("(hover: none) and (pointer: coarse)").matches},timestamp:Date.now()})}).catch(()=>{});
-
-        // Check zoom level
-        const zoom = Math.round(window.devicePixelRatio * 100);
-        fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'E',location:'index.html:1987',message:'Zoom level detected',data:{zoomLevel:zoom,devicePixelRatio:window.devicePixelRatio},timestamp:Date.now()})}).catch(()=>{});
-      });
-
-      // Monitor for zoom changes
-      let lastZoom = window.devicePixelRatio;
-      setInterval(() => {
-        const currentZoom = window.devicePixelRatio;
-        if (currentZoom !== lastZoom) {
-          fetch('http://127.0.0.1:7242/ingest/a6cacc12-8caa-4e03-9aef-1214cf21521e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-mobile-swipe',runId:'initial',hypothesisId:'E',location:'index.html:1993',message:'Zoom level changed',data:{oldZoom:lastZoom,newZoom:currentZoom,change:currentZoom-lastZoom},timestamp:Date.now()})}).catch(()=>{});
-          lastZoom = currentZoom;
-        }
-      }, 1000);
-      // #endregion
     </script>
 
     <!-- Version indicator at bottom of page -->
