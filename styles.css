@@ -320,6 +320,14 @@ button:focus-visible {
   position: relative;
 }
 
+/* Desktop: slides use normal document flow */
+@media (hover: hover) {
+  .slide {
+    position: relative;
+    top: auto;
+  }
+}
+
 /* Prosjekt-sliden trenger mer plass nederst for å unngå at tekst klippes av */
 #slide-3 {
   padding-top: 0px;
@@ -519,24 +527,23 @@ body {
     box-sizing: border-box;
   }
   
-  /* Ensure slides don't overlap on mobile - disable scroll-snap since we use body scrolling */
+  /* Ensure slides work properly on mobile with container scrolling */
   .slide {
-    scroll-snap-align: none;
-    scroll-snap-stop: normal;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    /* Use absolute positioning to prevent overlap */
+    position: absolute;
+    left: 0;
+    right: 0;
     /* Ensure each slide takes full viewport height */
-    min-height: 100vh;
-    min-height: 100dvh;
     height: 100vh;
     height: 100dvh;
-    /* Prevent content overflow */
-    overflow: hidden;
+    /* Allow content to show properly */
+    overflow: visible;
     /* Prevent zoom on slide */
     touch-action: pan-y;
     /* Ensure proper sizing */
     box-sizing: border-box;
-    /* Ensure slides stack properly without overlap */
-    margin-bottom: 0;
-    border-bottom: none;
     /* Ensure proper box sizing */
     box-sizing: border-box;
   }
