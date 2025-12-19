@@ -344,6 +344,13 @@ button:focus-visible {
   align-items: start;
 }
 
+/* Extra bottom space for contact slide to prevent snapping issues */
+#slide-4 {
+  margin-bottom: 100px; /* Extra space at bottom */
+  padding-bottom: 120px; /* Even more padding at bottom */
+}
+}
+
 /* Better scaling on mobile - reduce padding and font sizes */
 @media (hover: none) and (pointer: coarse) {
   .slide {
@@ -510,7 +517,7 @@ body {
   
   /* Apply scroll-snap to html/body for better mobile experience */
   html {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity; /* Changed from mandatory to proximity for gentler snapping */
     scroll-padding-top: 84px;
     scroll-padding-bottom: env(safe-area-inset-bottom, 34px);
     scroll-behavior: smooth;
@@ -532,6 +539,11 @@ body {
       /* Ensure proper scrolling with iOS Safari address bar */
       padding-bottom: env(safe-area-inset-bottom, 0px);
     }
+    /* Extra space for contact slide on iOS */
+    #slide-4 {
+      margin-bottom: 200px;
+      padding-bottom: 230px;
+    }
   }
 
   /* Better slide sizing on mobile */
@@ -550,6 +562,9 @@ body {
   /* Allow free scrolling on contact slide (last slide) */
   #slide-4 {
     scroll-snap-align: none;
+    /* Extra bottom space for mobile to prevent content cutoff and snapping */
+    margin-bottom: 150px;
+    padding-bottom: 180px;
   }
     /* Use relative positioning for proper document flow */
     position: relative;
