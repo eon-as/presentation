@@ -1456,6 +1456,45 @@ html[data-theme="system"] .avatar {
 .contact {
   padding: 20px;
 }
+
+/* Mobile contact section - more compact */
+@media (hover: none) and (pointer: coarse) {
+  .contact {
+    padding: 14px;
+  }
+  .contact .section-head {
+    margin-bottom: 8px;
+  }
+  .contact .section-head h3 {
+    font-size: 18px;
+  }
+  .contact .card {
+    padding: 12px;
+  }
+  .contact .grid.two {
+    margin-top: 10px;
+  }
+  .contact-item {
+    margin-top: 12px;
+    padding-bottom: 12px;
+  }
+  .contact-item:first-child {
+    margin-top: 0;
+  }
+  .contact-item [style*="margin-bottom:8px"] {
+    margin-bottom: 6px !important;
+  }
+  .contact-item [style*="margin-bottom:10px"] {
+    margin-bottom: 8px !important;
+  }
+  .contact-row {
+    margin-top: 8px;
+  }
+  .contact-row .btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
 .contact-item {
   padding-bottom: 16px;
   border-bottom: 1px solid var(--line);
