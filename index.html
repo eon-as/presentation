@@ -1254,7 +1254,7 @@
     <script>
       (() => {
         // Version info - bump this when making changes
-        const VERSION = 'v0.4';
+        const VERSION = 'v0.5';
         const LAST_UPDATED = '19. desember 2025';
 
         const root = document.documentElement;
@@ -1453,15 +1453,30 @@
         function getClosestSlideIndex() {
           // Use scrollEl.scrollTop for consistent scrolling across devices
           const scrollTop = scrollEl?.scrollTop || 0;
+          const viewportHeight = window.innerHeight;
           let best = 0;
           let bestDist = Infinity;
 
           for (let i = 0; i < slides.length; i++) {
-            // Use offsetTop for proper slide positioning
             const slideTop = slides[i].offsetTop;
-            const d = Math.abs(slideTop - scrollTop);
-            if (d < bestDist) {
-              bestDist = d;
+            const slideHeight = slides[i].offsetHeight;
+            const slideBottom = slideTop + slideHeight;
+
+            // Calculate distance to slide start
+            let distance = 0;
+            if (scrollTop < slideTop) {
+              // Above slide
+              distance = slideTop - scrollTop;
+            } else if (scrollTop > slideBottom - viewportHeight) {
+              // Below slide (considering viewport)
+              distance = scrollTop - (slideBottom - viewportHeight);
+            } else {
+              // Within slide
+              distance = 0; // Perfect match when inside slide
+            }
+
+            if (distance < bestDist) {
+              bestDist = distance;
               best = i;
             }
           }
@@ -1509,6 +1524,8 @@
         }
 
         let rafId = 0;
+        let lastSlideIndex = 0;
+
         function handleScroll(e) {
           // Don't handle scroll events from scrollable-content (profile scrolling)
           if (e && e.target && e.target.closest(".scrollable-content")) {
@@ -1516,7 +1533,27 @@
           }
           cancelAnimationFrame(rafId);
           rafId = requestAnimationFrame(() => {
-            setCurrentDot(getClosestSlideIndex());
+            const currentSlideIndex = getClosestSlideIndex();
+            const scrollTop = scrollEl?.scrollTop || 0;
+
+            // Only update slide indicator if we're at the edge of a slide or changed slides
+            const currentSlide = slides[currentSlideIndex];
+            if (currentSlide) {
+              const slideTop = currentSlide.offsetTop;
+              const slideHeight = currentSlide.offsetHeight;
+              const viewportHeight = window.innerHeight;
+
+              // Check if we're near the top or bottom edge of the current slide
+              const nearTop = scrollTop <= slideTop + (viewportHeight * 0.1);
+              const nearBottom = scrollTop >= (slideTop + slideHeight - viewportHeight) - (viewportHeight * 0.1);
+              const slideChanged = currentSlideIndex !== lastSlideIndex;
+
+              if (nearTop || nearBottom || slideChanged) {
+                setCurrentDot(currentSlideIndex);
+                lastSlideIndex = currentSlideIndex;
+              }
+            }
+
             handleHeaderScroll();
             updateScrollProgress();
           });
@@ -1951,7 +1988,7 @@
 
     <script>
       // Version constants (must match the ones in main script)
-      const VERSION = 'v0.4';
+      const VERSION = 'v0.5';
       const LAST_UPDATED = '19. desember 2025';
 
       // Set version info at bottom of page
