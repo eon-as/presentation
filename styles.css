@@ -487,18 +487,18 @@ body {
     position: relative;
   }
   
-  /* Use container scrolling without automatic snap for better control */
+  /* Use container scrolling with gentle snap for better navigation */
   .scroll {
     height: 100vh;
     height: 100dvh;
     overflow-y: auto;
     overflow-x: hidden;
-    /* Remove automatic scroll-snap, use JavaScript control instead */
-    scroll-snap-type: none;
+    /* Use proximity snap to help with slide navigation without being aggressive */
+    scroll-snap-type: y proximity;
     scroll-behavior: smooth;
     position: relative;
     /* Prevent body scroll */
-    overscroll-behavior: none;
+    overscroll-behavior: contain;
   }
 
   /* Prevent body scrolling on mobile */
@@ -530,6 +530,8 @@ body {
   
   /* Ensure slides work properly on mobile with container scrolling */
   .slide {
+    /* Gentle snap alignment for proximity scrolling */
+    scroll-snap-align: start;
     /* Use relative positioning for proper document flow */
     position: relative;
     /* Allow slides to grow taller than viewport if content requires it */
@@ -541,10 +543,12 @@ body {
     touch-action: pan-y;
     /* Ensure proper sizing */
     box-sizing: border-box;
-    /* Add margin between slides to prevent visual overlap */
-    margin-bottom: 20px;
+    /* Add padding between slides to prevent visual overlap */
+    padding-bottom: 40px;
     /* Create visual separation */
-    border-bottom: 1px solid transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* Ensure slides don't interfere with each other */
+    margin-bottom: 0;
     /* Ensure proper box sizing */
     box-sizing: border-box;
   }

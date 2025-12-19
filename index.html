@@ -1254,7 +1254,7 @@
     <script>
       (() => {
         // Version info - bump this when making changes
-        const VERSION = 'v0.5';
+        const VERSION = 'v0.6';
         const LAST_UPDATED = '19. desember 2025';
 
         const root = document.documentElement;
@@ -1534,25 +1534,10 @@
           cancelAnimationFrame(rafId);
           rafId = requestAnimationFrame(() => {
             const currentSlideIndex = getClosestSlideIndex();
-            const scrollTop = scrollEl?.scrollTop || 0;
 
-            // Only update slide indicator if we're at the edge of a slide or changed slides
-            const currentSlide = slides[currentSlideIndex];
-            if (currentSlide) {
-              const slideTop = currentSlide.offsetTop;
-              const slideHeight = currentSlide.offsetHeight;
-              const viewportHeight = window.innerHeight;
-
-              // Check if we're near the top or bottom edge of the current slide
-              const nearTop = scrollTop <= slideTop + (viewportHeight * 0.1);
-              const nearBottom = scrollTop >= (slideTop + slideHeight - viewportHeight) - (viewportHeight * 0.1);
-              const slideChanged = currentSlideIndex !== lastSlideIndex;
-
-              if (nearTop || nearBottom || slideChanged) {
-                setCurrentDot(currentSlideIndex);
-                lastSlideIndex = currentSlideIndex;
-              }
-            }
+            // Always update slide indicator for better UX
+            setCurrentDot(currentSlideIndex);
+            lastSlideIndex = currentSlideIndex;
 
             handleHeaderScroll();
             updateScrollProgress();
@@ -1988,7 +1973,7 @@
 
     <script>
       // Version constants (must match the ones in main script)
-      const VERSION = 'v0.5';
+      const VERSION = 'v0.6';
       const LAST_UPDATED = '19. desember 2025';
 
       // Set version info at bottom of page
