@@ -1232,6 +1232,63 @@ html[data-theme="light"] .modal-head {
   padding: 14px;
 }
 
+/* Mobile modal styling */
+@media (hover: none) and (pointer: coarse) {
+  .modal {
+    background: rgba(0, 0, 0, 0.85); /* Darker overlay on mobile */
+  }
+
+  .modal-dialog {
+    width: min(95vw, 100%);
+    max-height: min(90vh, 100vh);
+    margin: 10px;
+    border-radius: 16px;
+  }
+
+  .modal-head {
+    padding: 16px 18px;
+  }
+
+  .modal-head strong {
+    font-size: 16px; /* Smaller title on mobile */
+  }
+
+  .modal-body {
+    padding: 16px 18px;
+  }
+
+  .modal .btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    min-height: 44px; /* Better touch target */
+  }
+
+  /* Modal content styling for mobile */
+  .modal .bullets {
+    font-size: 14px;
+    line-height: 1.5;
+    padding-left: 16px;
+  }
+
+  .modal .bullets li {
+    margin: 8px 0;
+  }
+
+  .modal h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .modal p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .modal .muted.small {
+    font-size: 13px;
+  }
+}
+
 .bullets {
   margin: 10px 0 0;
   padding-left: 18px;
