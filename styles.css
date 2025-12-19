@@ -1092,6 +1092,13 @@ body {
   padding: 18px;
 }
 
+/* Mobile modal spacing - ensure content is never clipped */
+@media (hover: none) and (pointer: coarse) {
+  .modal {
+    padding: 20px 16px; /* More padding on mobile for breathing room */
+  }
+}
+
 /* Mobile "preview" helper overlay (iOS Quick Look / in-app viewers) */
 .open-safari {
   position: fixed;
@@ -1277,9 +1284,9 @@ body {
   }
 
   .modal-dialog {
-    width: min(95vw, 100%);
-    max-height: min(90vh, 100vh);
-    margin: 10px;
+    width: min(92vw, 100%);
+    max-height: min(85vh, 100vh); /* Reduced from 90vh to give more margin */
+    margin: 20px auto; /* More margin top/bottom, auto center horizontally */
     border-radius: 16px;
     /* Base theme-aware background */
     background: rgba(11, 16, 32, 0.95); /* Dark theme fallback */
@@ -1296,9 +1303,9 @@ body {
   }
 
   .modal-head {
-    padding: 16px 18px;
+    padding: 18px 18px 16px; /* More top padding for mobile breathing room */
     /* Base theme-aware background */
-    background: var(--panel2); /* Dark theme fallback */
+    background: var(--panel2) !important; /* Dark theme fallback */
   }
 
   .modal-head {
@@ -1331,7 +1338,7 @@ body {
   }
 
   .modal-body {
-    padding: 16px 18px;
+    padding: 16px 18px 20px; /* Extra bottom padding for mobile */
     color: var(--text) !important; /* Ensure body text follows theme */
   }
 
