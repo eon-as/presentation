@@ -686,7 +686,7 @@
 
             <!-- Version info -->
             <div class="version-info" id="version-indicator">
-              v1.1.4 • Oppdatert 19. desember 2025
+              v1.1.5 • Oppdatert 19. desember 2025
             </div>
           </div>
         </div>
@@ -1257,7 +1257,7 @@
     <script>
       (() => {
         // Version info - bump this when making changes
-        const VERSION = 'v1.1.4';
+        const VERSION = 'v1.1.5';
         const LAST_UPDATED = '19. desember 2025';
 
         const root = document.documentElement;
@@ -1764,14 +1764,17 @@
 
             // Horizontal swipe: navigate between profiles
             if (isHorizontalSwipe && absX > HORIZONTAL_THRESHOLD) {
-              const scrollAmount = personsScroll.offsetWidth * 0.85;
+              const personElements = personsScroll.querySelectorAll('.person-scrollable');
+              const scrollAmount = personElements[0] ? personElements[0].offsetWidth + 16 : personsScroll.offsetWidth * 0.75; // Element width + gap
               const currentScroll = personsScroll.scrollLeft;
               const targetScroll = swipeDistanceX > 0
                 ? currentScroll + scrollAmount // Swipe left (next)
                 : currentScroll - scrollAmount; // Swipe right (previous)
 
+              // Calculate max scroll (accounting for padding)
+              const maxScroll = personsScroll.scrollWidth - personsScroll.clientWidth;
               personsScroll.scrollTo({
-                left: Math.max(0, Math.min(targetScroll, personsScroll.scrollWidth - personsScroll.offsetWidth)),
+                left: Math.max(0, Math.min(targetScroll, maxScroll)),
                 behavior: "smooth"
               });
             }
@@ -1847,14 +1850,17 @@
 
             // Horizontal swipe: navigate between projects
             if (isHorizontalSwipe && absX > HORIZONTAL_THRESHOLD) {
-              const scrollAmount = projectsScroll.offsetWidth * 0.85;
+              const projectElements = projectsScroll.querySelectorAll('.project');
+              const scrollAmount = projectElements[0] ? projectElements[0].offsetWidth + 16 : projectsScroll.offsetWidth * 0.7; // Element width + gap
               const currentScroll = projectsScroll.scrollLeft;
               const targetScroll = swipeDistanceX > 0
                 ? currentScroll + scrollAmount // Swipe left (next)
                 : currentScroll - scrollAmount; // Swipe right (previous)
 
+              // Calculate max scroll (accounting for padding)
+              const maxScroll = projectsScroll.scrollWidth - projectsScroll.clientWidth;
               projectsScroll.scrollTo({
-                left: Math.max(0, Math.min(targetScroll, projectsScroll.scrollWidth - projectsScroll.offsetWidth)),
+                left: Math.max(0, Math.min(targetScroll, maxScroll)),
                 behavior: "smooth"
               });
             }

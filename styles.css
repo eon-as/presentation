@@ -890,9 +890,8 @@ body {
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    gap: 14px;
-    padding: 0 14px 8px;
-    margin: 0 -14px;
+    gap: 16px;
+    padding: 0 20px 8px; /* Increased side padding for better centering */
     /* Hide scrollbar but keep functionality */
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -902,12 +901,14 @@ body {
     position: relative;
     flex: 1;
     align-items: stretch;
+    /* Ensure proper scroll padding for centering */
+    scroll-padding: 0 20px;
   }
   .projects-scroll::after,
   .persons-scroll::after {
     content: "";
     position: sticky;
-    right: -14px;
+    right: -20px;
     top: 0;
     width: 20px;
     height: 100%;
@@ -920,9 +921,9 @@ body {
     display: none;
   }
   .projects-scroll .project {
-    flex: 0 0 85vw; /* Use viewport width for better mobile sizing */
-    min-width: 280px; /* Minimum readable width */
-    max-width: calc(100vw - 40px); /* Don't exceed screen width */
+    flex: 0 0 calc(70vw - 20px); /* Smaller for better centering with padding */
+    min-width: 240px; /* Minimum readable width */
+    max-width: calc(75vw - 20px); /* Don't exceed screen width */
     scroll-snap-align: center;
     scroll-snap-stop: always;
     /* Ensure text wraps and fits */
@@ -931,9 +932,9 @@ body {
   }
 
   .persons-scroll .person-scrollable {
-    flex: 0 0 85vw; /* Use viewport width for better mobile sizing */
-    min-width: 280px; /* Minimum readable width */
-    max-width: calc(100vw - 40px); /* Don't exceed screen width */
+    flex: 0 0 calc(75vw - 20px); /* Smaller for better centering with padding */
+    min-width: 260px; /* Minimum readable width */
+    max-width: calc(80vw - 20px); /* Don't exceed screen width */
     scroll-snap-align: center;
     scroll-snap-stop: always;
     /* Ensure proper height constraints */
