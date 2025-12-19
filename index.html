@@ -2011,13 +2011,17 @@
     </script>
 
     <!-- Version indicator at bottom of page -->
-    <div id="version-indicator"></div>
+    <div id="version-indicator" style="display: none;">v0.1 • Oppdatert 19. desember 2025</div>
 
     <script>
       // Set version info at bottom of page
       const versionIndicator = document.getElementById('version-indicator');
       if (versionIndicator) {
         versionIndicator.textContent = `${VERSION} • Oppdatert ${LAST_UPDATED}`;
+        versionIndicator.style.display = 'block'; // Ensure it's visible
+        console.log('Version indicator set:', versionIndicator.textContent); // Debug log
+      } else {
+        console.log('Version indicator element not found'); // Debug log
       }
     </script>
   </body>
