@@ -1416,7 +1416,9 @@
         });
 
         // Reveal animations (IntersectionObserver)
-        const revealEls = Array.from(document.querySelectorAll("[data-reveal]"));
+        const revealEls = Array.from(document.querySelectorAll("[data-reveal]")).filter(el =>
+          el instanceof Element && el.isConnected
+        );
         if (!prefersReduced && "IntersectionObserver" in window) {
           const io = new IntersectionObserver(
             (entries) => {
@@ -1426,9 +1428,21 @@
             },
             { root: isMobile ? null : scrollEl, rootMargin: "0px", threshold: 0.22 }
           );
-          revealEls.forEach((el) => io.observe(el));
+          revealEls.forEach((el) => {
+            try {
+              io.observe(el);
+            } catch (error) {
+              console.warn('Could not observe element:', el, error);
+            }
+          });
         } else {
-          revealEls.forEach((el) => el.classList.add("is-visible"));
+          revealEls.forEach((el) => {
+            try {
+              el.classList.add("is-visible");
+            } catch (error) {
+              console.warn('Could not add class to element:', el, error);
+            }
+          });
         }
 
         // Active slide + dots
