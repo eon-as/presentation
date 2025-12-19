@@ -179,7 +179,7 @@
                 </div>
 
                 <p class="footer-hint">
-                  
+
                 </p>
               </div>
 
@@ -1253,6 +1253,10 @@
 
     <script>
       (() => {
+        // Version info - bump this when making changes
+        const VERSION = 'v0.1';
+        const LAST_UPDATED = '19. desember 2025';
+
         const root = document.documentElement;
         const scrollEl = document.querySelector(".scroll");
         const topbar = document.querySelector(".topbar");
@@ -1995,6 +1999,12 @@
 
         // Initial dot
         setCurrentDot(0);
+
+        // Set version info
+        const footerHint = document.querySelector('.footer-hint');
+        if (footerHint) {
+          footerHint.textContent = `${VERSION} • Oppdatert ${LAST_UPDATED}`;
+        }
       })();
 
       // #region agent log - Hypothesis E: Viewport and zoom settings not working
