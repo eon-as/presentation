@@ -1258,14 +1258,18 @@ html[data-theme="light"] .modal .muted.small {
     background: rgba(0, 0, 0, 0.85); /* Darker overlay on mobile - theme-aware */
   }
 
-  /* Theme-aware mobile modal overlay */
+  /* Override base modal background with theme-aware versions */
+  .modal {
+    background: rgba(0, 0, 0, 0.85); /* Fallback for dark themes */
+  }
+
   html[data-theme="light"] .modal {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.9) !important;
   }
 
   html[data-theme="dark"] .modal,
   html[data-theme="system"] .modal {
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.85) !important;
   }
 
   .modal-dialog {
@@ -1273,38 +1277,38 @@ html[data-theme="light"] .modal .muted.small {
     max-height: min(90vh, 100vh);
     margin: 10px;
     border-radius: 16px;
-    /* Ensure theme-aware background on mobile */
-    background: var(--panel2);
+    /* Base theme-aware background */
+    background: rgba(11, 16, 32, 0.95); /* Dark theme fallback */
   }
 
-  /* Theme-specific mobile modal dialog */
+  /* Override with theme-specific backgrounds */
   html[data-theme="light"] .modal-dialog {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.95) !important;
   }
 
   html[data-theme="dark"] .modal-dialog,
   html[data-theme="system"] .modal-dialog {
-    background: rgba(11, 16, 32, 0.95);
+    background: rgba(11, 16, 32, 0.95) !important;
   }
 
   .modal-head {
     padding: 16px 18px;
-    /* Ensure theme-aware background on mobile */
-    background: var(--panel);
+    /* Base theme-aware background */
+    background: var(--panel2); /* Dark theme fallback */
   }
 
   .modal-head strong {
     font-size: 16px; /* Smaller title on mobile */
   }
 
-  /* Theme-specific mobile modal head */
+  /* Override with theme-specific backgrounds - ensure they take precedence */
   html[data-theme="light"] .modal-head {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.95) !important;
   }
 
   html[data-theme="dark"] .modal-head,
   html[data-theme="system"] .modal-head {
-    background: var(--panel2);
+    background: var(--panel2) !important;
   }
 
   .modal-body {
@@ -1322,8 +1326,8 @@ html[data-theme="light"] .modal .muted.small {
     font-size: 14px;
     line-height: 1.5;
     padding-left: 16px;
-    /* Theme-aware text color */
-    color: var(--muted);
+    /* Base theme-aware text color */
+    color: var(--muted); /* Dark theme fallback */
   }
 
   .modal .bullets li {
@@ -1342,38 +1346,44 @@ html[data-theme="light"] .modal .muted.small {
 
   .modal .muted.small {
     font-size: 13px;
-    color: var(--muted);
+    color: var(--muted); /* Dark theme fallback */
   }
 
-  /* Theme-specific mobile modal content */
+  /* Theme-specific mobile modal content - with !important to ensure precedence */
   html[data-theme="light"] .modal .bullets {
-    color: rgba(0, 0, 0, 0.7);
+    color: rgba(0, 0, 0, 0.7) !important;
   }
 
   html[data-theme="light"] .modal .muted.small {
-    color: rgba(0, 0, 0, 0.6);
+    color: rgba(0, 0, 0, 0.6) !important;
   }
 
   html[data-theme="dark"] .modal .bullets,
   html[data-theme="system"] .modal .bullets {
-    color: var(--muted);
+    color: var(--muted) !important;
   }
 
   html[data-theme="dark"] .modal .muted.small,
   html[data-theme="system"] .modal .muted.small {
-    color: var(--muted);
+    color: var(--muted) !important;
   }
 
-  /* Theme-specific mobile timeline elements */
+  /* Base mobile timeline styling */
+  .modal .tl {
+    background: rgba(255, 255, 255, 0.04) !important; /* Dark theme fallback */
+    border-color: var(--line) !important;
+  }
+
+  /* Override with theme-specific mobile timeline elements */
   html[data-theme="light"] .modal .tl {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
   }
 
   html[data-theme="dark"] .modal .tl,
   html[data-theme="system"] .modal .tl {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: var(--line);
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: var(--line) !important;
   }
 }
 
