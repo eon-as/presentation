@@ -337,29 +337,67 @@ button:focus-visible {
 }
 
 /* Mobile viewers (iOS Files/preview, some in-app browsers) can break nested scrolling.
-   Fallback: let the page (body) scroll instead of the inner container. */
+   Improved mobile scrolling with better touch support and scroll-snap. */
 @media (hover: none) and (pointer: coarse) {
   body {
     overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    /* Enable momentum scrolling on iOS */
     -webkit-overflow-scrolling: touch;
   }
+  
+  /* Use body scroll instead of nested .scroll container on mobile */
   .scroll {
     height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
     overflow: visible;
     scroll-snap-type: none;
+    position: relative;
   }
+  
+  /* Apply scroll-snap to html/body for better mobile experience */
   html {
     scroll-snap-type: y mandatory;
     scroll-padding-top: 84px;
+    scroll-behavior: smooth;
   }
-  body > .scroll > .slide {
+  
+  /* Ensure slides snap properly on mobile */
+  .slide {
     scroll-snap-align: start;
+    scroll-snap-stop: always;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
+  
+  /* Improve touch scrolling performance */
+  .scroll,
+  .slide,
+  .slide-inner {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+  
   /* If JS-based reveal doesn't run in a mobile viewer, never hide content */
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+  
+  /* Better scrollbar visibility on mobile (if supported) */
+  body::-webkit-scrollbar {
+    width: 4px;
+  }
+  body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
   }
 }
 
@@ -599,6 +637,49 @@ button:focus-visible {
   .grid.two,
   .grid.three {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Projects swipe container for mobile */
+.projects-container {
+  width: 100%;
+}
+.projects-scroll {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (hover: none) and (pointer: coarse) {
+  .projects-scroll {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    gap: 14px;
+    padding: 0 14px 8px;
+    margin: 0 -14px;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    touch-action: pan-x;
+  }
+  .projects-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .projects-scroll .project {
+    flex: 0 0 calc(100% - 28px);
+    min-width: calc(100% - 28px);
+    max-width: calc(100% - 28px);
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+}
+@media (min-width: 901px) {
+  .projects-scroll {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
