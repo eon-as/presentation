@@ -391,9 +391,33 @@ button:focus-visible {
   }
 }
 
+/* Prevent zoom and ensure proper scaling */
+html {
+  touch-action: pan-x pan-y;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  touch-action: pan-x pan-y;
+  /* Prevent pinch zoom */
+  touch-action: manipulation;
+}
+
 /* Mobile viewers (iOS Files/preview, some in-app browsers) can break nested scrolling.
    Improved mobile scrolling with better touch support and scroll-snap. */
 @media (hover: none) and (pointer: coarse) {
+  html {
+    /* Prevent zoom */
+    touch-action: pan-x pan-y;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
   body {
     overflow-y: auto;
     overflow-x: hidden;
@@ -401,6 +425,14 @@ button:focus-visible {
     scroll-behavior: smooth;
     /* Enable momentum scrolling on iOS */
     -webkit-overflow-scrolling: touch;
+    /* Prevent zoom */
+    touch-action: pan-x pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Ensure content fills screen properly */
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
   }
   
   /* Use body scroll instead of nested .scroll container on mobile */
@@ -418,14 +450,32 @@ button:focus-visible {
     scroll-snap-type: y mandatory;
     scroll-padding-top: 84px;
     scroll-behavior: smooth;
+    /* Prevent zoom */
+    touch-action: pan-x pan-y;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
+  /* Better slide sizing on mobile */
+  .slide-inner {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   /* Ensure slides snap properly on mobile, but allow exceptions */
   .slide {
     scroll-snap-align: start;
     scroll-snap-stop: always;
+    /* Ensure slide fills viewport */
     min-height: 100vh;
     min-height: 100dvh;
+    /* Prevent content overflow */
+    overflow: visible;
+    /* Prevent zoom on slide */
+    touch-action: pan-y;
   }
   /* Disable scroll-snap for slide-2 (Team) on mobile to allow scrolling inside profiles */
   #slide-2 {

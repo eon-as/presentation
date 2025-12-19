@@ -2,7 +2,7 @@
 <html lang="no" data-theme="system">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="color-scheme" content="dark light" />
     <title>Eon AS — Firmapresentasjon</title>
     <meta
@@ -1516,6 +1516,71 @@
         
         // Use appropriate scroll container
         scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
+        
+        // Improved swipe detection for mobile slide navigation
+        if (isMobile) {
+          let touchStartY = 0;
+          let touchEndY = 0;
+          let touchStartTime = 0;
+          let isSwipeGesture = false;
+          
+          const SWIPE_THRESHOLD = 50; // Minimum swipe distance
+          const SWIPE_TIME_THRESHOLD = 300; // Maximum time for swipe (ms)
+          const SWIPE_VELOCITY_THRESHOLD = 0.3; // Minimum velocity
+          
+          document.addEventListener("touchstart", (e) => {
+            // Don't interfere with horizontal swipes in projects/persons scroll
+            if (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll") || e.target.closest(".scrollable-content")) {
+              return;
+            }
+            
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+            isSwipeGesture = false;
+          }, { passive: true });
+          
+          document.addEventListener("touchmove", (e) => {
+            // Don't interfere with horizontal swipes in projects/persons scroll
+            if (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll") || e.target.closest(".scrollable-content")) {
+              return;
+            }
+            
+            const touchY = e.touches[0].clientY;
+            const deltaY = Math.abs(touchY - touchStartY);
+            const deltaTime = Date.now() - touchStartTime;
+            
+            // Detect if this is a quick swipe gesture
+            if (deltaY > 10 && deltaTime < SWIPE_TIME_THRESHOLD) {
+              const velocity = deltaY / deltaTime;
+              if (velocity > SWIPE_VELOCITY_THRESHOLD) {
+                isSwipeGesture = true;
+              }
+            }
+          }, { passive: true });
+          
+          document.addEventListener("touchend", (e) => {
+            // Don't interfere with horizontal swipes in projects/persons scroll
+            if (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll") || e.target.closest(".scrollable-content")) {
+              return;
+            }
+            
+            touchEndY = e.changedTouches[0].clientY;
+            const swipeDistance = touchStartY - touchEndY;
+            const swipeTime = Date.now() - touchStartTime;
+            const swipeVelocity = Math.abs(swipeDistance) / swipeTime;
+            
+            // Only trigger on quick, deliberate swipes
+            if (Math.abs(swipeDistance) > SWIPE_THRESHOLD && swipeTime < SWIPE_TIME_THRESHOLD && swipeVelocity > SWIPE_VELOCITY_THRESHOLD) {
+              if (swipeDistance > 0) {
+                // Swipe up - go to next slide
+                goNext();
+              } else {
+                // Swipe down - go to previous slide
+                goPrev();
+              }
+            }
+          }, { passive: true });
+        }
         
         // Handle scrollable-content scrolling - allow vertical scroll to trigger slide navigation on mobile
         document.querySelectorAll(".scrollable-content").forEach((content) => {
