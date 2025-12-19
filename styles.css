@@ -347,6 +347,13 @@ button:focus-visible {
     align-items: stretch;
     min-height: 100vh;
     min-height: 100dvh;
+    /* Ensure slides don't overlap */
+    position: relative;
+    width: 100%;
+    /* Clear any potential overlap */
+    clear: both;
+    /* Prevent content from flowing outside */
+    overflow: hidden;
   }
   .slide-inner {
     width: 100%;
@@ -472,14 +479,24 @@ body {
     position: relative;
   }
   
-  /* Use body scroll instead of nested .scroll container on mobile */
+  /* Use container scrolling instead of body scroll for better mobile control */
   .scroll {
-    height: auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow: visible;
-    scroll-snap-type: none;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
     position: relative;
+    /* Prevent body scroll */
+    overscroll-behavior: none;
+  }
+
+  /* Prevent body scrolling on mobile */
+  body {
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh;
   }
   
   /* Apply scroll-snap to html/body for better mobile experience */
@@ -502,22 +519,24 @@ body {
     box-sizing: border-box;
   }
   
-  /* Ensure slides snap properly on mobile, but allow exceptions */
+  /* Ensure slides don't overlap on mobile - disable scroll-snap since we use body scrolling */
   .slide {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    /* Ensure slide fills viewport but not excessively */
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+    /* Ensure each slide takes full viewport height */
     min-height: 100vh;
     min-height: 100dvh;
-    height: auto; /* Allow content to determine height */
-    max-height: 100vh; /* But don't exceed viewport */
-    max-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
     /* Prevent content overflow */
-    overflow: visible;
+    overflow: hidden;
     /* Prevent zoom on slide */
     touch-action: pan-y;
     /* Ensure proper sizing */
     box-sizing: border-box;
+    /* Ensure slides stack properly without overlap */
+    margin-bottom: 0;
+    border-bottom: none;
     /* Ensure proper box sizing */
     box-sizing: border-box;
   }

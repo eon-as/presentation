@@ -1272,8 +1272,8 @@
 
         // Detect if we're on mobile (touch device)
         const isMobile = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-        // On mobile, use window/body for scroll, on desktop use .scroll container
-        const scrollContainer = isMobile ? window : scrollEl;
+        // On mobile and desktop, use .scroll container for consistent scrolling
+        const scrollContainer = scrollEl;
         const modalReactTypeScript = document.getElementById("modal-react-typescript");
         const modalViteTailwind = document.getElementById("modal-vite-tailwind");
         const modalRust = document.getElementById("modal-rust");
@@ -1451,15 +1451,12 @@
         }
 
         function getClosestSlideIndex() {
-          // On mobile, use window.scrollY, on desktop use scrollEl.scrollTop
-          const top = isMobile ? window.scrollY : (scrollEl?.scrollTop || 0);
+          // Use scrollEl.scrollTop for consistent scrolling across devices
+          const top = scrollEl?.scrollTop || 0;
           let best = 0;
           let bestDist = Infinity;
           for (let i = 0; i < slides.length; i++) {
-            // On mobile, slides are direct children of body, on desktop they're in .scroll
-            const slideTop = isMobile 
-              ? slides[i].getBoundingClientRect().top + window.scrollY
-              : slides[i].offsetTop;
+            const slideTop = slides[i].offsetTop;
             const d = Math.abs(slideTop - top);
             if (d < bestDist) {
               bestDist = d;
@@ -1474,9 +1471,9 @@
         let scrollTimeout = null;
         
         function handleHeaderScroll() {
-          const scrollTop = isMobile ? window.scrollY : (scrollEl?.scrollTop || 0);
+          const scrollTop = scrollEl?.scrollTop || 0;
           const scrollDelta = scrollTop - lastScrollTop;
-          
+
           // Only hide/show if scrolling more than 10px
           if (Math.abs(scrollDelta) > 10) {
             if (scrollDelta > 0 && scrollTop > 100) {
@@ -1488,7 +1485,7 @@
             }
             lastScrollTop = scrollTop;
           }
-          
+
           // Always show header at the top
           if (scrollTop < 50) {
             topbar?.classList.remove("hidden");
@@ -1498,22 +1495,13 @@
         // Scroll progress bar
         const progressBar = document.querySelector(".scroll-progress-bar");
         function updateScrollProgress() {
-          if (!progressBar) return;
-          let scrollTop, scrollHeight, clientHeight;
-          
-          if (isMobile) {
-            scrollTop = window.scrollY;
-            scrollHeight = document.documentElement.scrollHeight;
-            clientHeight = window.innerHeight;
-          } else {
-            if (!scrollEl) return;
-            scrollTop = scrollEl.scrollTop;
-            scrollHeight = scrollEl.scrollHeight;
-            clientHeight = scrollEl.clientHeight;
-          }
-          
-          const progress = (scrollHeight - clientHeight) > 0 
-            ? (scrollTop / (scrollHeight - clientHeight)) * 100 
+          if (!progressBar || !scrollEl) return;
+          const scrollTop = scrollEl.scrollTop;
+          const scrollHeight = scrollEl.scrollHeight;
+          const clientHeight = scrollEl.clientHeight;
+
+          const progress = (scrollHeight - clientHeight) > 0
+            ? (scrollTop / (scrollHeight - clientHeight)) * 100
             : 0;
           progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
         }
@@ -1535,82 +1523,7 @@
         // Use appropriate scroll container
         scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
         
-        // Improved swipe detection for mobile slide navigation
-        if (isMobile) {
-          let touchStartY = 0;
-          let touchEndY = 0;
-          let touchStartX = 0;
-          let touchStartTime = 0;
-          let hasHorizontalIntent = false;
-
-          const SWIPE_THRESHOLD = 40; // Minimum swipe distance
-          const SWIPE_TIME_THRESHOLD = 400; // Maximum time for swipe (ms)
-          const HORIZONTAL_THRESHOLD = 20; // Distance to detect horizontal intent
-
-          document.addEventListener("touchstart", (e) => {
-            touchStartY = e.touches[0].clientY;
-            touchStartX = e.touches[0].clientX;
-            touchStartTime = Date.now();
-            hasHorizontalIntent = false;
-          }, { passive: true });
-
-          document.addEventListener("touchmove", (e) => {
-            if (!touchStartTime) return;
-
-            const touchY = e.touches[0].clientY;
-            const touchX = e.touches[0].clientX;
-            const deltaY = Math.abs(touchY - touchStartY);
-            const deltaX = Math.abs(touchX - touchStartX);
-
-            // Determine swipe intent - if moved more horizontally, it's for internal scrolling
-            if (deltaX > HORIZONTAL_THRESHOLD && deltaX > deltaY) {
-              hasHorizontalIntent = true;
-            }
-
-            // If horizontal intent detected and we're in a scrollable area, let it handle the swipe
-            if (hasHorizontalIntent && (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll"))) {
-              // Let the horizontal scroll container handle this
-              return;
-            }
-
-            // For vertical swipes, prevent default only if we're not in scrollable content
-            if (deltaY > deltaX && !e.target.closest(".scrollable-content")) {
-              // Allow vertical scrolling for slide navigation
-            }
-          }, { passive: true });
-
-          document.addEventListener("touchend", (e) => {
-            if (!touchStartTime) return;
-
-            const touchEndY = e.changedTouches[0].clientY;
-            const touchEndX = e.changedTouches[0].clientX;
-            const swipeDistanceY = touchStartY - touchEndY;
-            const swipeDistanceX = touchStartX - touchEndX;
-            const swipeTime = Date.now() - touchStartTime;
-            const absSwipeY = Math.abs(swipeDistanceY);
-            const absSwipeX = Math.abs(swipeDistanceX);
-
-            // If horizontal swipe was detected and we're in horizontal scroll area, skip slide navigation
-            if (hasHorizontalIntent && (e.target.closest(".projects-scroll") || e.target.closest(".persons-scroll"))) {
-              return;
-            }
-
-            // If vertical swipe is dominant and meets thresholds, navigate slides
-            if (absSwipeY > absSwipeX && absSwipeY > SWIPE_THRESHOLD && swipeTime < SWIPE_TIME_THRESHOLD) {
-              if (swipeDistanceY > 0) {
-                // Swipe up - go to next slide
-                goNext();
-              } else {
-                // Swipe down - go to previous slide
-                goPrev();
-              }
-            }
-
-            // Reset
-            touchStartTime = 0;
-            hasHorizontalIntent = false;
-          }, { passive: true });
-        }
+        // Swipe detection is now handled by CSS scroll-snap behavior
         
         // Handle scrollable-content scrolling - smarter mobile navigation
         document.querySelectorAll(".scrollable-content").forEach((content) => {
@@ -1629,7 +1542,7 @@
             const isScrollingUpAtBottom = isAtBottom && scrollDirection < 0;
 
             // Stop propagation only when we're in the middle of content scrolling
-            if (isMobile && !(isAtTop || isAtBottom || isScrollingDownAtTop || isScrollingUpAtBottom)) {
+            if (!(isAtTop || isAtBottom || isScrollingDownAtTop || isScrollingUpAtBottom)) {
               e.stopPropagation();
             }
             // Otherwise, let the scroll event bubble up for slide navigation
@@ -1659,15 +1572,9 @@
         function goToSlide(i) {
           const idx = Math.max(0, Math.min(slides.length - 1, i));
           const behavior = prefersReduced ? "auto" : "smooth";
-          
-          if (isMobile) {
-            // On mobile, scroll window to slide
-            const slideTop = slides[idx].getBoundingClientRect().top + window.scrollY - 84; // Account for topbar
-            window.scrollTo({ top: slideTop, behavior });
-          } else {
-            // On desktop, scroll within .scroll container
-            slides[idx].scrollIntoView({ behavior, block: "start" });
-          }
+
+          // Scroll within .scroll container for consistent behavior
+          slides[idx].scrollIntoView({ behavior, block: "start" });
           setCurrentDot(idx);
         }
 
