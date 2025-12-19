@@ -1255,7 +1255,17 @@ html[data-theme="light"] .modal .muted.small {
 /* Mobile modal styling */
 @media (hover: none) and (pointer: coarse) {
   .modal {
-    background: rgba(0, 0, 0, 0.85); /* Darker overlay on mobile */
+    background: rgba(0, 0, 0, 0.85); /* Darker overlay on mobile - theme-aware */
+  }
+
+  /* Theme-aware mobile modal overlay */
+  html[data-theme="light"] .modal {
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  html[data-theme="dark"] .modal,
+  html[data-theme="system"] .modal {
+    background: rgba(0, 0, 0, 0.85);
   }
 
   .modal-dialog {
@@ -1263,14 +1273,38 @@ html[data-theme="light"] .modal .muted.small {
     max-height: min(90vh, 100vh);
     margin: 10px;
     border-radius: 16px;
+    /* Ensure theme-aware background on mobile */
+    background: var(--panel2);
+  }
+
+  /* Theme-specific mobile modal dialog */
+  html[data-theme="light"] .modal-dialog {
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  html[data-theme="dark"] .modal-dialog,
+  html[data-theme="system"] .modal-dialog {
+    background: rgba(11, 16, 32, 0.95);
   }
 
   .modal-head {
     padding: 16px 18px;
+    /* Ensure theme-aware background on mobile */
+    background: var(--panel);
   }
 
   .modal-head strong {
     font-size: 16px; /* Smaller title on mobile */
+  }
+
+  /* Theme-specific mobile modal head */
+  html[data-theme="light"] .modal-head {
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  html[data-theme="dark"] .modal-head,
+  html[data-theme="system"] .modal-head {
+    background: var(--panel2);
   }
 
   .modal-body {
@@ -1288,6 +1322,8 @@ html[data-theme="light"] .modal .muted.small {
     font-size: 14px;
     line-height: 1.5;
     padding-left: 16px;
+    /* Theme-aware text color */
+    color: var(--muted);
   }
 
   .modal .bullets li {
@@ -1306,6 +1342,38 @@ html[data-theme="light"] .modal .muted.small {
 
   .modal .muted.small {
     font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* Theme-specific mobile modal content */
+  html[data-theme="light"] .modal .bullets {
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  html[data-theme="light"] .modal .muted.small {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  html[data-theme="dark"] .modal .bullets,
+  html[data-theme="system"] .modal .bullets {
+    color: var(--muted);
+  }
+
+  html[data-theme="dark"] .modal .muted.small,
+  html[data-theme="system"] .modal .muted.small {
+    color: var(--muted);
+  }
+
+  /* Theme-specific mobile timeline elements */
+  html[data-theme="light"] .modal .tl {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  html[data-theme="dark"] .modal .tl,
+  html[data-theme="system"] .modal .tl {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--line);
   }
 }
 
