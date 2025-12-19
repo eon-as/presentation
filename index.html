@@ -1254,7 +1254,7 @@
     <script>
       (() => {
         // Version info - bump this when making changes
-        const VERSION = 'v0.3';
+        const VERSION = 'v0.4';
         const LAST_UPDATED = '19. desember 2025';
 
         const root = document.documentElement;
@@ -1453,13 +1453,12 @@
         function getClosestSlideIndex() {
           // Use scrollEl.scrollTop for consistent scrolling across devices
           const scrollTop = scrollEl?.scrollTop || 0;
-          const viewportHeight = window.innerHeight;
           let best = 0;
           let bestDist = Infinity;
 
           for (let i = 0; i < slides.length; i++) {
-            // On mobile with absolute positioning, slides are at multiples of viewport height
-            const slideTop = i * viewportHeight;
+            // Use offsetTop for proper slide positioning
+            const slideTop = slides[i].offsetTop;
             const d = Math.abs(slideTop - scrollTop);
             if (d < bestDist) {
               bestDist = d;
@@ -1576,9 +1575,8 @@
           const idx = Math.max(0, Math.min(slides.length - 1, i));
           const behavior = prefersReduced ? "auto" : "smooth";
 
-          // Scroll to the correct position in the scroll container
-          const scrollTop = idx * (window.innerHeight);
-          scrollEl?.scrollTo({ top: scrollTop, behavior });
+          // Scroll to the slide using scrollIntoView for proper positioning
+          slides[idx].scrollIntoView({ behavior, block: "start" });
           setCurrentDot(idx);
         }
 
@@ -1930,26 +1928,18 @@
         // Initial dot
         setCurrentDot(0);
 
-        // Position slides correctly on mobile
-        function positionSlides() {
+        // Ensure slides are properly positioned
+        function setupSlides() {
           const isMobile = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-          if (isMobile) {
-            slides.forEach((slide, index) => {
-              slide.style.top = `${index * 100}vh`;
-              slide.style.top = `${index * 100}dvh`;
-            });
-          } else {
-            // Reset positioning on desktop
-            slides.forEach((slide) => {
-              slide.style.top = '';
-              slide.style.position = '';
-            });
-          }
+          slides.forEach((slide, index) => {
+            // Reset any inline positioning
+            slide.style.top = '';
+            slide.style.position = '';
+            slide.style.left = '';
+            slide.style.right = '';
+          });
         }
-        positionSlides();
-
-        // Reposition slides on resize
-        window.addEventListener('resize', positionSlides);
+        setupSlides();
 
         // Version info is now set at bottom of page
       })();
@@ -1961,7 +1951,7 @@
 
     <script>
       // Version constants (must match the ones in main script)
-      const VERSION = 'v0.3';
+      const VERSION = 'v0.4';
       const LAST_UPDATED = '19. desember 2025';
 
       // Set version info at bottom of page

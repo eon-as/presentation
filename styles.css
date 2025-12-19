@@ -531,19 +531,22 @@ body {
   .slide {
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    /* Use absolute positioning to prevent overlap */
-    position: absolute;
-    left: 0;
-    right: 0;
+    /* Use relative positioning for proper document flow */
+    position: relative;
     /* Ensure each slide takes full viewport height */
+    min-height: 100vh;
+    min-height: 100dvh;
     height: 100vh;
     height: 100dvh;
-    /* Allow content to show properly */
-    overflow: visible;
+    /* Prevent content overflow that causes visual overlap */
+    overflow: hidden;
     /* Prevent zoom on slide */
     touch-action: pan-y;
     /* Ensure proper sizing */
     box-sizing: border-box;
+    /* Create stacking context and containment to prevent content mixing */
+    isolation: isolate;
+    contain: layout style paint;
     /* Ensure proper box sizing */
     box-sizing: border-box;
   }
