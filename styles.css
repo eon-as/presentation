@@ -1613,14 +1613,20 @@ html[data-theme="system"] .avatar {
   font-size: 14px;
 }
 
-/* Version indicator at bottom right of screen */
+/* Version indicator at bottom of screen */
 #version-indicator {
   position: fixed;
-  bottom: 8px;
-  right: 12px;
-  font-size: 11px;
-  color: var(--muted2);
-  opacity: 0.7;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   pointer-events: none;
   z-index: 1000;
   font-weight: 400;
@@ -1630,8 +1636,7 @@ html[data-theme="system"] .avatar {
 /* Mobile adjustments for version indicator */
 @media (hover: none) and (pointer: coarse) {
   #version-indicator {
-    bottom: 6px;
-    right: 8px;
-    font-size: 10px;
+    padding: 6px 8px;
+    font-size: 11px;
   }
 }
