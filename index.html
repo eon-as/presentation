@@ -179,7 +179,7 @@
                 </div>
 
                 <p class="footer-hint">
-
+                  <!-- Version info moved to bottom of page -->
                 </p>
               </div>
 
@@ -2000,11 +2000,7 @@
         // Initial dot
         setCurrentDot(0);
 
-        // Set version info
-        const footerHint = document.querySelector('.footer-hint');
-        if (footerHint) {
-          footerHint.textContent = `${VERSION} • Oppdatert ${LAST_UPDATED}`;
-        }
+        // Version info is now set at bottom of page
       })();
 
       // #region agent log - Hypothesis E: Viewport and zoom settings not working
@@ -2026,6 +2022,17 @@
         }
       }, 1000);
       // #endregion
+    </script>
+
+    <!-- Version indicator at bottom of page -->
+    <div id="version-indicator"></div>
+
+    <script>
+      // Set version info at bottom of page
+      const versionIndicator = document.getElementById('version-indicator');
+      if (versionIndicator) {
+        versionIndicator.textContent = `${VERSION} • Oppdatert ${LAST_UPDATED}`;
+      }
     </script>
   </body>
 </html>
