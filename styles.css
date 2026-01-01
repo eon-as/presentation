@@ -511,6 +511,8 @@ body {
   box-shadow: var(--shadow-md);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  padding: 28px;
+  position: relative;
 }
 
 .hero {
@@ -714,7 +716,7 @@ body {
   align-items: flex-end;
   justify-content: space-between;
   gap: 18px;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 .section-head h3 {
   margin: 0 0 16px 0;
