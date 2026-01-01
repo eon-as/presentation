@@ -128,7 +128,7 @@
       <a href="#slide-4" aria-current="false" aria-label="Slide 4"></a>
     </nav>
 
-    <main id="main" class="scroll" tabindex="-1" aria-label="Firmapresentasjon">
+    <main id="main" tabindex="-1" aria-label="Firmapresentasjon">
       <!-- Slide 1: HERO -->
       <section class="slide" id="slide-1" aria-label="Intro">
         <div class="slide-inner">
@@ -1261,7 +1261,8 @@
         const LAST_UPDATED = '19. desember 2025';
 
         const root = document.documentElement;
-        const scrollEl = document.querySelector(".scroll");
+        // Use window for scrolling (body scroll) instead of .scroll container
+        const scrollEl = window;
         const topbar = document.querySelector(".topbar");
         const dots = Array.from(document.querySelectorAll(".dots a"));
         const slides = Array.from(document.querySelectorAll(".slide"));
@@ -1275,8 +1276,8 @@
 
         // Detect if we're on mobile (touch device)
         const isMobile = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-        // On mobile and desktop, use .scroll container for consistent scrolling
-        const scrollContainer = scrollEl;
+        // Use window for scroll events
+        const scrollContainer = window;
         const modalReactTypeScript = document.getElementById("modal-react-typescript");
         const modalViteTailwind = document.getElementById("modal-vite-tailwind");
         const modalRust = document.getElementById("modal-rust");
@@ -1437,7 +1438,7 @@
                 if (e.isIntersecting) e.target.classList.add("is-visible");
               }
             },
-            { root: isMobile ? null : scrollEl, rootMargin: "0px", threshold: 0.22 }
+            { root: null, rootMargin: "0px", threshold: 0.22 }
           );
           revealEls.forEach((el) => {
             try {
@@ -1462,29 +1463,19 @@
         }
 
         function getClosestSlideIndex() {
-          // Use scrollEl.scrollTop for consistent scrolling across devices
-          const scrollTop = scrollEl?.scrollTop || 0;
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
           const viewportHeight = window.innerHeight;
+          const viewportCenter = scrollTop + viewportHeight / 2;
           let best = 0;
           let bestDist = Infinity;
 
           for (let i = 0; i < slides.length; i++) {
-            const slideTop = slides[i].offsetTop;
-            const slideHeight = slides[i].offsetHeight;
-            const slideBottom = slideTop + slideHeight;
-
-            // Calculate distance to slide start
-            let distance = 0;
-            if (scrollTop < slideTop) {
-              // Above slide
-              distance = slideTop - scrollTop;
-            } else if (scrollTop > slideBottom - viewportHeight) {
-              // Below slide (considering viewport)
-              distance = scrollTop - (slideBottom - viewportHeight);
-            } else {
-              // Within slide
-              distance = 0; // Perfect match when inside slide
-            }
+            const slideRect = slides[i].getBoundingClientRect();
+            const slideTop = scrollTop + slideRect.top;
+            const slideCenter = slideTop + slideRect.height / 2;
+            
+            // Calculate distance from viewport center to slide center
+            const distance = Math.abs(viewportCenter - slideCenter);
 
             if (distance < bestDist) {
               bestDist = distance;
@@ -1499,7 +1490,7 @@
         let scrollTimeout = null;
         
         function handleHeaderScroll() {
-          const scrollTop = scrollEl?.scrollTop || 0;
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
           const scrollDelta = scrollTop - lastScrollTop;
 
           // Only hide/show if scrolling more than 10px
@@ -1523,10 +1514,10 @@
         // Scroll progress bar
         const progressBar = document.querySelector(".scroll-progress-bar");
         function updateScrollProgress() {
-          if (!progressBar || !scrollEl) return;
-          const scrollTop = scrollEl.scrollTop;
-          const scrollHeight = scrollEl.scrollHeight;
-          const clientHeight = scrollEl.clientHeight;
+          if (!progressBar) return;
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollHeight = document.documentElement.scrollHeight;
+          const clientHeight = window.innerHeight;
 
           const progress = (scrollHeight - clientHeight) > 0
             ? (scrollTop / (scrollHeight - clientHeight)) * 100
@@ -1555,7 +1546,7 @@
           });
         }
         
-        // Use appropriate scroll container
+        // Use window scroll event
         scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
         
         // Swipe detection is now handled by CSS scroll-snap behavior
@@ -1614,12 +1605,12 @@
         // Initial progress update
         updateScrollProgress();
 
-        // Keyboard navigation (Up/Down)
+        // Keyboard navigation (Up/Down) - smooth scroll to anchors
         function goToSlide(i) {
           const idx = Math.max(0, Math.min(slides.length - 1, i));
           const behavior = prefersReduced ? "auto" : "smooth";
 
-          // Scroll to the slide using scrollIntoView for proper positioning
+          // Scroll to the slide using scrollIntoView for smooth scrolling
           slides[idx].scrollIntoView({ behavior, block: "start" });
           setCurrentDot(idx);
         }
@@ -1668,8 +1659,8 @@
         function closeModal(modalEl) {
           if (!modalEl) return;
           modalEl.classList.remove("open");
-          // Restore scroll based on device type
-          document.body.style.overflow = isMobile ? "auto" : "hidden";
+          // Restore body scroll
+          document.body.style.overflow = "";
           if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
         }
 
