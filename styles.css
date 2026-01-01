@@ -142,6 +142,28 @@ a:focus-visible,
 button:focus-visible {
   outline: none;
   box-shadow: var(--focus);
+  /* Enhanced focus indicator with better visibility */
+  outline-offset: 2px;
+}
+
+/* Enhanced focus indicators for better accessibility */
+@supports selector(:focus-visible) {
+  /* Improved focus for interactive elements */
+  [data-open-modal]:focus-visible,
+  [data-close-modal]:focus-visible,
+  .chip:focus-visible {
+    outline: 2px solid rgba(141, 240, 255, 0.7);
+    outline-offset: 3px;
+    box-shadow: var(--focus), 0 0 0 4px rgba(141, 240, 255, 0.1);
+  }
+  
+  /* Focus for cards that are clickable/interactive */
+  .card[role="button"]:focus-visible,
+  .card[tabindex]:focus-visible {
+    outline: 2px solid rgba(141, 240, 255, 0.6);
+    outline-offset: 2px;
+    box-shadow: var(--focus);
+  }
 }
 
 .skip {
@@ -843,19 +865,29 @@ body {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     gap: 16px;
-    padding: 0 20px 8px; /* Increased side padding for better centering */
+    padding: 0; /* No padding - cards fill container */
     /* Hide scrollbar but keep functionality */
     scrollbar-width: none;
     -ms-overflow-style: none;
-    /* Allow both horizontal and vertical touch actions for smart detection */
-    touch-action: pan-x pan-y;
+    /* Prioritize vertical scrolling, only allow horizontal when explicitly swiping horizontally */
+    touch-action: pan-y pinch-zoom; /* Default to vertical, allow pinch-zoom */
     /* Visual indicator that there's more content - gradient fade */
     position: relative;
     flex: 1;
     align-items: stretch;
     min-height: 0; /* Allow flex shrinking */
     /* Ensure proper scroll padding for centering */
-    scroll-padding: 0 20px;
+    scroll-padding: 0;
+    /* Prevent accidental horizontal scrolling */
+    overscroll-behavior-x: contain;
+  }
+  
+  /* Enable horizontal scrolling only when content actually overflows */
+  @supports selector(:has(*)) {
+    .projects-scroll:has(.project:nth-child(2)),
+    .persons-scroll:has(.person-scrollable:nth-child(2)) {
+      touch-action: pan-x pan-y pinch-zoom; /* Allow horizontal when multiple items */
+    }
   }
   .projects-scroll::after,
   .persons-scroll::after {
@@ -874,11 +906,13 @@ body {
     display: none;
   }
   .projects-scroll .project {
-    flex: 0 0 calc(85vw - 40px); /* Better width for mobile viewing */
-    min-width: calc(85vw - 40px); /* Ensure consistent width */
-    max-width: calc(85vw - 40px); /* Don't exceed screen width */
-    width: calc(85vw - 40px); /* Explicit width */
-    scroll-snap-align: center;
+    /* Use 100% to fill container (which already accounts for panel padding) */
+    flex: 0 0 100%;
+    min-width: 0; /* Allow flex shrinking */
+    max-width: 100%; /* Don't exceed container */
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding is included in width */
+    scroll-snap-align: start;
     scroll-snap-stop: always;
     /* Ensure text wraps and fits */
     word-wrap: break-word;
@@ -887,13 +921,25 @@ body {
     -webkit-overflow-scrolling: touch;
     content-visibility: auto; /* Performance optimization */
   }
+  
+  /* When multiple projects exist, use smaller width to allow horizontal scroll */
+  @supports selector(:has(*)) {
+    .projects-scroll:has(.project:nth-child(2)) .project {
+      flex: 0 0 calc(85% - 8px); /* 85% of container minus half gap */
+      min-width: calc(85% - 8px);
+      max-width: calc(85% - 8px);
+      width: calc(85% - 8px);
+    }
+  }
 
   .persons-scroll .person-scrollable {
-    flex: 0 0 calc(85vw - 40px); /* Better width for mobile viewing */
-    min-width: calc(85vw - 40px); /* Ensure consistent width */
-    max-width: calc(85vw - 40px); /* Don't exceed screen width */
-    width: calc(85vw - 40px); /* Explicit width */
-    scroll-snap-align: center;
+    /* Use 100% to fill container (which already accounts for panel padding) */
+    flex: 0 0 100%;
+    min-width: 0; /* Allow flex shrinking */
+    max-width: 100%; /* Don't exceed container */
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding is included in width */
+    scroll-snap-align: start;
     scroll-snap-stop: always;
     /* Ensure proper height constraints - fit within available space */
     height: 100%;
@@ -903,6 +949,16 @@ body {
     overflow: hidden; /* Prevent card from expanding */
     -webkit-overflow-scrolling: touch;
     content-visibility: auto; /* Performance optimization */
+  }
+  
+  /* When multiple persons exist, use smaller width to allow horizontal scroll */
+  @supports selector(:has(*)) {
+    .persons-scroll:has(.person-scrollable:nth-child(2)) .person-scrollable {
+      flex: 0 0 calc(85% - 8px); /* 85% of container minus half gap */
+      min-width: calc(85% - 8px);
+      max-width: calc(85% - 8px);
+      width: calc(85% - 8px);
+    }
   }
 }
 @media (min-width: 901px) {
@@ -927,6 +983,41 @@ body {
     box-shadow var(--dur-2) var(--ease-out);
   position: relative;
   overflow: hidden;
+  /* Container Queries: responsive styling based on container size */
+  container-type: inline-size;
+}
+
+/* Container Queries: adjust padding based on card width */
+@container (max-width: 300px) {
+  .card {
+    padding: 10px;
+  }
+  
+  .card h4 {
+    font-size: 14px;
+  }
+}
+
+/* :has() selector: enhanced styling for cards with images */
+@supports selector(:has(*)) {
+  .card:has(img) {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card:has(.project-media) {
+    gap: 12px;
+  }
+  
+  /* Cards with buttons get better spacing */
+  .card:has(button) {
+    gap: 14px;
+  }
+  
+  /* Better hover effect for cards with images */
+  .card:has(.project-media):hover .project-media {
+    transform: scale(1.02);
+  }
 }
 .card::before {
   content: "";
@@ -1662,6 +1753,8 @@ html[data-theme="system"] .avatar {
   height: 100%;
   object-fit: cover;
   display: block;
+  /* Ensure aspect-ratio is preserved to prevent layout shift */
+  aspect-ratio: inherit;
   filter: saturate(1.02) contrast(1.03);
   transition: transform var(--dur-3) var(--ease-out),
     filter var(--dur-2) var(--ease-out);
