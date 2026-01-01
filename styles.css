@@ -381,8 +381,9 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center; /* Center content horizontally */
-    padding: 0 8px; /* Add some horizontal padding */
+    align-items: stretch; /* Stretch to fill width */
+    padding: 0; /* Remove padding - panel handles its own spacing */
+    box-sizing: border-box;
   }
   .section-head {
     margin-bottom: 10px;
@@ -403,11 +404,14 @@ html {
     overflow-wrap: break-word;
   }
   .card {
-    padding: 8px;
+    padding: 10px; /* Slightly increased for readability */
     /* Ensure text doesn't overflow */
     word-wrap: break-word;
     overflow-wrap: break-word;
+    hyphens: auto; /* Enable automatic hyphenation */
     max-width: 100%;
+    box-sizing: border-box; /* Include padding in width */
+    overflow-x: hidden; /* Prevent horizontal overflow */
   }
   .card h4 {
     font-size: 15px;
@@ -838,11 +842,14 @@ body {
 }
 @media (hover: none) and (pointer: coarse) {
   .panel {
-    padding: 18px 16px; /* Reduced padding on mobile for more space */
+    padding: 18px 12px; /* Further reduced padding on mobile for more space */
     display: flex; /* Flex container on mobile */
     flex-direction: column; /* Stack children vertically */
     min-height: 0; /* Allow flex shrinking */
     overflow: hidden; /* Prevent panel from expanding */
+    width: 100%; /* Ensure panel fills container */
+    max-width: 100%; /* Don't exceed container */
+    box-sizing: border-box; /* Include padding in width calculation */
   }
 
   .projects-container,
@@ -917,7 +924,9 @@ body {
     /* Ensure text wraps and fits */
     word-wrap: break-word;
     overflow-wrap: break-word;
+    hyphens: auto; /* Enable automatic hyphenation for long words */
     overflow-y: auto; /* Allow vertical scrolling if content is too tall */
+    overflow-x: hidden; /* Prevent horizontal overflow */
     -webkit-overflow-scrolling: touch;
     content-visibility: auto; /* Performance optimization */
   }
@@ -947,6 +956,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden; /* Prevent card from expanding */
+    overflow-x: hidden; /* Prevent horizontal overflow */
     -webkit-overflow-scrolling: touch;
     content-visibility: auto; /* Performance optimization */
   }
@@ -983,8 +993,14 @@ body {
     box-shadow var(--dur-2) var(--ease-out);
   position: relative;
   overflow: hidden;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  box-sizing: border-box; /* Include padding in width */
   /* Container Queries: responsive styling based on container size */
   container-type: inline-size;
+  /* Ensure text wraps properly */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto; /* Enable automatic hyphenation */
 }
 
 /* Container Queries: adjust padding based on card width */
