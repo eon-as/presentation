@@ -20,24 +20,27 @@ En offline single-file HTML-presentasjon som fungerer på alle plattformer (iOS,
 
 ## Funksjoner
 
-- ✅ **100% offline** — alt er innebygd (bilder, CSS, JavaScript)
+- ✅ **100% offline** — alt er innebygd (bilder, CSS, JavaScript, fonts)
 - ✅ **Dark/Light mode** — automatisk basert på systeminnstillinger
-- ✅ **Scroll-snap slides** — smooth scrolling mellom slides
+- ✅ **Smooth continuous scrolling** — naturlig scrolling uten snap-effekter
 - ✅ **Animasjoner** — reveal-animasjoner når du scroller
 - ✅ **Modals** — detaljerte CV-er og prosjektinfo i popups
 - ✅ **Mobilvennlig** — responsivt design for alle skjermstørrelser
+- ✅ **Accessibility** — keyboard navigation, screen reader support, fokusindikatorer
 
 ## Teknisk
 
-- **En fil**: Alt er innebygd i `index.html` (inkludert base64-kodede bilder)
+- **Hovedfil**: `index.html` inneholder alt (HTML, CSS, JavaScript)
+- **Bilder**: Lastes fra `bilder/` mappen (relativ path)
+- **Fonts**: Inter-font embeddet direkte i CSS
 - **Ingen avhengigheter**: Ingen eksterne lenker eller CDN-er
-- **Størrelse**: ~2.2 MB (inkludert bilder)
+- **Størrelse**: ~2-3 MB (inkludert bilder i `bilder/` mappen)
 
 ## Utvikling
 
 Filen er selvforklarende med kommentarer. For å endre innhold:
 - Rediger tekst direkte i `index.html`
-- For nye bilder: Konverter til base64 og legg i `INLINE_IMAGES` objektet i scriptet
+- For nye bilder: Legg bilder i `bilder/` mappen og referer til dem med `data-inline` attributt i `INLINE_IMAGES` objektet
 
 ## Lisens
 

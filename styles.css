@@ -1,6 +1,6 @@
 :root {
-  /* Typography */
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  /* Typography - using system fonts for 100% offline compatibility */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
@@ -427,9 +427,7 @@ html {
 }
 
 body {
-  touch-action: pan-x pan-y;
-  /* Prevent pinch zoom */
-  touch-action: manipulation;
+  touch-action: pan-x pan-y; /* Allow panning but not pinch-zoom (for better touch scrolling) */
 }
 
 /* Mobile scrolling improvements - continuous scrolling */
@@ -446,23 +444,17 @@ body {
     scroll-padding-bottom: env(safe-area-inset-bottom, 34px);
   }
   
-  body {
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    /* Prevent zoom */
-    touch-action: pan-x pan-y;
-    /* Ensure content fills screen properly */
-    width: 100%;
-    max-width: 100vw;
-    position: relative;
-  }
-  
   /* Body scrolling for mobile - handled by default browser behavior */
   body {
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    touch-action: pan-x pan-y;
+    /* Ensure content fills screen properly */
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
   }
 
   /* Better slide sizing on mobile */
