@@ -313,7 +313,8 @@ html {
   place-items: center;
   padding: 100px 24px 60px;
   position: relative;
-  min-height: calc(100vh - 84px); /* Minimum height minus topbar, but allow content to expand */
+  min-height: calc(100dvh - 84px); /* Modern viewport unit: dynamic viewport height for better mobile support */
+  content-visibility: auto; /* Performance optimization: skip rendering when out of view */
 }
 
 /* Prosjekt-sliden trenger mer plass nederst */
@@ -527,6 +528,10 @@ body {
 .hero::after {
   content: "";
   position: absolute;
+  pointer-events: none;
+}
+
+.hero::before {
   inset: auto auto -140px -160px;
   width: 380px;
   height: 380px;
@@ -539,19 +544,60 @@ body {
   );
   filter: blur(2px);
   opacity: 0.9;
-  pointer-events: none;
 }
+
 .hero::after {
   inset: -160px -180px auto auto;
   width: 460px;
   height: 460px;
+  border-radius: 999px;
   background: radial-gradient(
     circle at 30% 30%,
     rgba(167, 139, 250, 0.45),
     rgba(94, 234, 212, 0.25),
     transparent 70%
   );
+  filter: blur(2px);
   opacity: 0.8;
+}
+
+/* Scroll-driven animations for hero gradients (parallax effect) */
+@supports (animation-timeline: scroll(root)) {
+  .hero::before {
+    /* Scroll-driven animation: parallax effect */
+    animation: heroGradientMove 1s linear;
+    animation-timeline: scroll(root);
+    animation-range: entry 0% entry 100%;
+  }
+
+  @keyframes heroGradientMove {
+    from {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.9;
+    }
+    to {
+      transform: translate(-20px, 30px) scale(1.1);
+      opacity: 0.7;
+    }
+  }
+
+  .hero::after {
+    /* Scroll-driven animation: parallax effect (opposite direction) */
+    animation: heroGradientMoveReverse 1s linear;
+    animation-timeline: scroll(root);
+    animation-range: entry 0% entry 100%;
+  }
+
+  @keyframes heroGradientMoveReverse {
+    from {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.8;
+    }
+    to {
+      transform: translate(20px, -30px) scale(1.15);
+      opacity: 0.6;
+    }
+  }
 }
 
 .hero-grid {
@@ -839,6 +885,7 @@ body {
     overflow-wrap: break-word;
     overflow-y: auto; /* Allow vertical scrolling if content is too tall */
     -webkit-overflow-scrolling: touch;
+    content-visibility: auto; /* Performance optimization */
   }
 
   .persons-scroll .person-scrollable {
@@ -855,6 +902,7 @@ body {
     flex-direction: column;
     overflow: hidden; /* Prevent card from expanding */
     -webkit-overflow-scrolling: touch;
+    content-visibility: auto; /* Performance optimization */
   }
 }
 @media (min-width: 901px) {
@@ -998,6 +1046,16 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 18px;
+  /* View Transitions API */
+  view-transition-name: modal-overlay;
+}
+
+@supports (view-transition-name: none) {
+  ::view-transition-old(modal-overlay),
+  ::view-transition-new(modal-overlay) {
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in-out;
+  }
 }
 
 /* Mobile modal spacing - ensure content is never clipped */
@@ -1106,6 +1164,48 @@ body {
   border: 1px solid var(--line2);
   background: var(--panel2);
   box-shadow: var(--shadow-lg);
+  /* View Transitions API */
+  view-transition-name: modal-dialog;
+}
+
+@supports (view-transition-name: none) {
+  ::view-transition-old(modal-dialog),
+  ::view-transition-new(modal-dialog) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  ::view-transition-old(modal-dialog) {
+    animation-name: slide-out, fade-out;
+  }
+  
+  ::view-transition-new(modal-dialog) {
+    animation-name: slide-in, fade-in;
+  }
+  
+  @keyframes slide-in {
+    from {
+      transform: scale(0.9) translateY(20px);
+    }
+  }
+  
+  @keyframes slide-out {
+    to {
+      transform: scale(0.95) translateY(-10px);
+    }
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
 }
 /* Desktop modal theme rules - isolated to avoid conflicts with mobile */
 @media (hover: hover) {
@@ -1193,7 +1293,7 @@ body {
 
   .modal-dialog {
     width: min(92vw, 100%);
-    max-height: min(85vh, 100vh); /* Reduced from 90vh to give more margin */
+    max-height: min(85dvh, 100dvh); /* Modern viewport unit: dynamic viewport height */
     margin: 20px auto; /* More margin top/bottom, auto center horizontally */
     border-radius: 16px;
     /* Base theme-aware background */
@@ -1370,8 +1470,9 @@ body {
 .person-scrollable {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 300px);
+  max-height: calc(100dvh - 300px); /* Modern viewport unit: dynamic viewport height */
   min-height: 450px;
+  content-visibility: auto; /* Performance optimization */
 }
 @media (hover: none) and (pointer: coarse) {
   .person-scrollable {

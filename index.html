@@ -1745,17 +1745,35 @@
         function openModal(modalEl) {
           if (!modalEl) return;
           lastFocus = document.activeElement;
-          modalEl.classList.add("open");
-          // Prevent body scroll when modal is open
-          document.body.style.overflow = "hidden";
+          
+          // Use View Transitions API if supported for smooth animation
+          if (document.startViewTransition) {
+            document.startViewTransition(() => {
+              modalEl.classList.add("open");
+              document.body.style.overflow = "hidden";
+            });
+          } else {
+            modalEl.classList.add("open");
+            document.body.style.overflow = "hidden";
+          }
+          
           const closeBtn = modalEl.querySelector("[data-close-modal]");
           closeBtn?.focus();
         }
         function closeModal(modalEl) {
           if (!modalEl) return;
-          modalEl.classList.remove("open");
-          // Restore body scroll
-          document.body.style.overflow = "";
+          
+          // Use View Transitions API if supported for smooth animation
+          if (document.startViewTransition) {
+            document.startViewTransition(() => {
+              modalEl.classList.remove("open");
+              document.body.style.overflow = "";
+            });
+          } else {
+            modalEl.classList.remove("open");
+            document.body.style.overflow = "";
+          }
+          
           if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
         }
 
