@@ -1381,16 +1381,13 @@ body {
 /* Mobile modal styling */
 @media (hover: none) and (pointer: coarse) {
   .modal {
-    background: rgba(0, 0, 0, 0.85); /* Darker overlay on mobile - theme-aware */
+    /* Base overlay - will be overridden by theme-specific rules */
+    background: rgba(0, 0, 0, 0.85);
   }
 
-  /* Override base modal background with theme-aware versions */
-  .modal {
-    background: rgba(0, 0, 0, 0.85); /* Fallback for dark themes */
-  }
-
+  /* Theme-specific overlay backgrounds */
   html[data-theme="light"] .modal {
-    background: rgba(255, 255, 255, 0.9) !important;
+    background: rgba(0, 0, 0, 0.5) !important; /* Lighter overlay for light theme */
   }
 
   html[data-theme="dark"] .modal,
@@ -1398,44 +1395,53 @@ body {
     background: rgba(0, 0, 0, 0.85) !important;
   }
 
+  /* System theme support: when system prefers light, treat system as light */
+  @media (prefers-color-scheme: light) {
+    html[data-theme="system"] .modal {
+      background: rgba(0, 0, 0, 0.5) !important;
+    }
+  }
+
   .modal-dialog {
     width: min(92vw, 100%);
     max-height: min(85dvh, 100dvh); /* Modern viewport unit: dynamic viewport height */
     margin: 20px auto; /* More margin top/bottom, auto center horizontally */
     border-radius: 16px;
-    /* Base theme-aware background */
-    background: rgba(11, 16, 32, 0.95); /* Dark theme fallback */
+    /* Use CSS variable that responds to theme automatically */
+    background: var(--panel2);
   }
 
-  /* Override with theme-specific backgrounds */
+  /* Override with theme-specific backgrounds for consistency */
   html[data-theme="light"] .modal-dialog {
-    background: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(255, 255, 255, 0.98) !important;
   }
 
   html[data-theme="dark"] .modal-dialog,
   html[data-theme="system"] .modal-dialog {
-    background: rgba(11, 16, 32, 0.95) !important;
+    background: rgba(11, 16, 32, 0.98) !important;
+  }
+
+  /* System theme support: when system prefers light, treat system as light */
+  @media (prefers-color-scheme: light) {
+    html[data-theme="system"] .modal-dialog {
+      background: rgba(255, 255, 255, 0.98) !important;
+    }
   }
 
   .modal-head {
     padding: 18px 18px 16px; /* More top padding for mobile breathing room */
-    /* Base theme-aware background */
-    background: var(--panel2) !important; /* Dark theme fallback */
-  }
-
-  .modal-head {
-    /* Base mobile modal head styling */
-    background: var(--panel2) !important; /* Dark theme fallback */
+    /* Use same background as modal-dialog for consistency */
+    background: var(--panel2);
   }
 
   .modal-head strong {
     font-size: 16px; /* Smaller title on mobile */
-    color: var(--text) !important; /* Ensure text is visible */
+    color: var(--text);
   }
 
-  /* Override with theme-specific backgrounds - ensure they take precedence */
+  /* Override with theme-specific backgrounds - match modal-dialog exactly */
   html[data-theme="light"] .modal-head {
-    background: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(255, 255, 255, 0.98) !important;
   }
 
   html[data-theme="light"] .modal-head strong {
@@ -1444,7 +1450,7 @@ body {
 
   html[data-theme="dark"] .modal-head,
   html[data-theme="system"] .modal-head {
-    background: var(--panel2) !important;
+    background: rgba(11, 16, 32, 0.98) !important;
   }
 
   html[data-theme="dark"] .modal-head strong,
@@ -1452,9 +1458,21 @@ body {
     color: var(--text) !important;
   }
 
+  /* System theme support: when system prefers light, treat system as light */
+  @media (prefers-color-scheme: light) {
+    html[data-theme="system"] .modal-head {
+      background: rgba(255, 255, 255, 0.98) !important;
+    }
+
+    html[data-theme="system"] .modal-head strong {
+      color: rgba(0, 0, 0, 0.9) !important;
+    }
+  }
+
   .modal-body {
     padding: 16px 18px 20px; /* Extra bottom padding for mobile */
-    color: var(--text) !important; /* Ensure body text follows theme */
+    color: var(--text);
+    background: transparent; /* Inherit from modal-dialog */
   }
 
   /* Theme-specific modal body text colors */
@@ -1465,6 +1483,13 @@ body {
   html[data-theme="dark"] .modal-body,
   html[data-theme="system"] .modal-body {
     color: var(--text) !important;
+  }
+
+  /* System theme support: when system prefers light, treat system as light */
+  @media (prefers-color-scheme: light) {
+    html[data-theme="system"] .modal-body {
+      color: rgba(0, 0, 0, 0.9) !important;
+    }
   }
 
   .modal .btn {
@@ -1520,6 +1545,17 @@ body {
     color: var(--muted) !important;
   }
 
+  /* System theme support: when system prefers light, treat system as light */
+  @media (prefers-color-scheme: light) {
+    html[data-theme="system"] .modal .bullets {
+      color: rgba(0, 0, 0, 0.7) !important;
+    }
+
+    html[data-theme="system"] .modal .muted.small {
+      color: rgba(0, 0, 0, 0.6) !important;
+    }
+  }
+
   /* Base mobile timeline styling */
   .modal .tl {
     background: rgba(255, 255, 255, 0.04) !important; /* Dark theme fallback */
@@ -1536,6 +1572,14 @@ body {
   html[data-theme="system"] .modal .tl {
     background: rgba(255, 255, 255, 0.04) !important;
     border-color: var(--line) !important;
+  }
+
+  /* System theme support: when system prefers light, treat system as light */
+  @media (prefers-color-scheme: light) {
+    html[data-theme="system"] .modal .tl {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border-color: rgba(0, 0, 0, 0.1) !important;
+    }
   }
 }
 
