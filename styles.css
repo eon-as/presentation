@@ -753,12 +753,15 @@ body {
 .projects-container,
 .persons-container {
   width: 100%;
+  margin-top: 4px; /* Small spacing from section-head, but cards still feel "in" the panel */
 }
 .projects-scroll,
 .persons-scroll {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
+  /* Ensure cards are visually "inside" the panel, not touching edges */
+  margin: 0;
 }
 .persons-scroll {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1512,7 +1515,7 @@ html[data-theme="system"] .avatar {
 
 .project-media {
   margin-top: 10px;
-  border-radius: 16px;
+  border-radius: var(--radius-md); /* Use consistent border-radius variable */
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.04);
   overflow: hidden;
